@@ -1,0 +1,1 @@
+En esta carpeta se trabajará el apartado del servidor, es decir, la lógica con la base de datos y la API.
