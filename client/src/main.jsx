@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import './index.css'
 import LoginForm from './components/login/LoginForm.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
