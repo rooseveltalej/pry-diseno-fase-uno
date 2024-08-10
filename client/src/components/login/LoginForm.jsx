@@ -1,9 +1,8 @@
-// src/Login.js
 import { useState } from 'react';
+import './LoginForm.css';  // Importa los estilos específicos para el formulario de inicio de sesión
 
 const Login = () => {
   const [requestToken, setRequestToken] = useState(null);
-
   const apiKey = "af7264be91d3f252b1abe33245f3b69f";
 
   // Función para solicitar un token de inicio de sesión
@@ -32,10 +31,10 @@ const Login = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', textAlign: 'center' }}>
-      <h2>Iniciar Sesión con TMDB</h2>
+    <div className="login-container">
+      <h2 className="login-title">Iniciar Sesión con TMDB</h2>
       <form onSubmit={handleSubmit}>
-        <button type="submit" style={{ padding: '10px 20px', cursor: 'pointer' }}>
+        <button type="submit" className="login-button">
           Iniciar Sesión
         </button>
       </form>
