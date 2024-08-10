@@ -139,3 +139,27 @@ button:hover {
 .video-container {
   margin-top: 20px;
 }
+
+.button-container {
+  width: 100%; /* Asegura que el contenedor ocupe el ancho completo */
+  display: flex;
+  justify-content: center; /* Centra los elementos horizontalmente */
+  position: sticky; /* Sticky para todo el contenedor */
+  top: 0; /* Se adhiere al top cuando se hace scroll */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  background-color: #121212; /* Fondo para que no se superponga el contenido */
+  padding: 10px 0; /* Espaciado para el contenido del botón */
+  margin-bottom: 20px;
+}
+
+.back-to-trending-button {
+  background-color: #007bff; /* Color de fondo */
+  color: white; /* Color de texto */
+  padding: 10px 20px; /* Espaciado interno */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  font-size: 16px; /* Tamaño de fuente */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+  transition: background-color 0.3s ease; /* Transición suave para hover */
+}
