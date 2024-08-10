@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import MovieList from './components/MovieList';
@@ -9,7 +11,7 @@ const App = () => {
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
+  const apiKey = "af7264be91d3f252b1abe33245f3b69f"
 
   useEffect(() => {
     fetchGenres();
