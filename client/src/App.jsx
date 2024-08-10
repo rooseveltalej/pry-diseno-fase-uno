@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
+import './App.css';
 
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [ShowSearchResults, setShowSearchResults] = useState(false)
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
 
   useEffect(() => {
@@ -69,7 +71,7 @@ const App = () => {
   return (
     <div className="app-container">
       <Header onSearch={searchMovie} genres={genres} />
-          {showSearchResults ? (
+          {ShowSearchResults ? (
       <>
         <h2>Resultados de la Búsqueda</h2>
         <div className="button-container">

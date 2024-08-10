@@ -6,6 +6,6 @@ import LoginForm from './components/login/LoginForm.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <LoginForm />
+    <App />
   </React.StrictMode>,
 )
