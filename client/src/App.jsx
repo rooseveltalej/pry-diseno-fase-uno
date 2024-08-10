@@ -3,6 +3,7 @@ import Header from './components/Header';
 import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
 import './App.css';
+import './Responsive.css'
 
 const App = () => {
   const [movies, setMovies] = useState([]);
