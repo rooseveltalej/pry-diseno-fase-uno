@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import LoginForm from './login/LoginForm';
 
 const Header = ({ onSearch, genres }) => {
   const handleSearch = (event) => {
@@ -21,6 +22,7 @@ const Header = ({ onSearch, genres }) => {
         <option value="8">Categoria 8+</option>
         <option value="9">Categoria 9+</option>
       </select>
+      <LoginForm />
     </header>
   );
 };
