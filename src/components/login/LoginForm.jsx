@@ -70,12 +70,26 @@ const Login = () => {
     }
   };
 
+  // Función para manejar el cierre de sesión
+  const handleLogout = () => {
+    localStorage.removeItem('session_id');
+    localStorage.removeItem('username');
+    setSessionId(null);
+    setUsername(null);
+    window.location.href = '/';  // Redirige a la página principal después del logout
+  };
+
   return (
     <>
       {username ? (
-        <button className="user-button">
-          {username}
-        </button>
+        <div>
+          <button className="user-button">
+            {username}
+          </button>
+          <button className="logout-button" onClick={handleLogout}>
+            Cerrar Sesión
+          </button>
+        </div>
       ) : (
         <button type="submit" className="login-button" onClick={handleSubmit}>
           Iniciar Sesión
