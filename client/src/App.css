@@ -75,14 +75,14 @@ main {
 }
 
 .movie-info strong {
-  color: #f9a825;
+  color: #007BFF;
 }
 
 button {
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #f9a825;
+  background-color:#00b3aa;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -91,7 +91,7 @@ button {
 }
 
 button:hover {
-  background-color: #ffca28;
+  background-color: #007BFF;
 }
 
 .modal {
