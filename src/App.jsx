@@ -40,6 +40,10 @@ const App = () => {
 
   const searchMovie = async (query = '') => {
     try {
+      if (!query) {
+        setShowSearchResults(false);
+        return;
+      }
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`);
       const data = await response.json();
       setMovies(data.results);
