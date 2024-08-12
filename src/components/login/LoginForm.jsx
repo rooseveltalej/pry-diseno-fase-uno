@@ -64,7 +64,7 @@ const Login = () => {
     const token = await getRequestToken();
     if (token) {
       // Redirigir al usuario para autenticar el token
-      window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:3000`;
+      window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173`;
     } else {
       alert('Error al obtener el token de autenticación');
     }
