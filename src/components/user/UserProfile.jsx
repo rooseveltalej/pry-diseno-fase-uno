@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FavoriteMovies from './FavoriteMovies';
 import FavoriteTvShows from './FavoriteTvShows';
+import UserLists from './UserList';
 
 
 const UserProfile = ({ sessionId }) => {
@@ -33,6 +34,8 @@ return (
         <p>País: {userInfo.iso_3166_1 || 'No disponible'}</p>
         </div>
     )}
+        <UserLists sessionId={sessionId} apiKey={apiKey} /> {/*Traemos el componente de las listas de usuario y le pasamos las props de sessionId y ApiKey */}
+        <h2>Mis Favoritos</h2>
         <FavoriteMovies sessionId={sessionId} apiKey={apiKey} /> {/*Traemos el componente de las peliculas favoritas y le pasamos las props de sessionId y ApiKey */}
         <FavoriteTvShows sessionId={sessionId} apiKey={apiKey} /> {/*Traemos el componente de las series favoritas y le pasamos las props de sessionId y ApiKey */}
     </div>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import propTypes from 'prop-types'
+import MovieList from "../MovieList";
+import './FavoriteMovies.css'
 
 const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL API KEY
     const [favoriteMovies, setFavoriteMovies] = useState([]);
-
 
     useEffect(() => {
         // Obtener la lista de películas favoritas del usuario
@@ -23,11 +24,7 @@ const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL AP
   return (
     <div className="favorite-movies">
         <h3>Mis Películas Favoritas</h3>
-        <ul>
-          {favoriteMovies.map(movie => (
-            <li key={movie.id}>{movie.title}</li>
-          ))}
-        </ul>
+        <MovieList movies={favoriteMovies} />{/*TODO, se muestra la carta de peliculas pero no se puede ver más información */}
       </div>
   )
 }

@@ -1,0 +1,20 @@
+.favorite-movies {
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 15px;
+  }
+  
+  .favorite-movies h3 {
+    font-size: 24px;
+    color: white;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }

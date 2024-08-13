@@ -57,7 +57,7 @@ const Login = () => {
       const response = await fetch(`https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`);
       const data = await response.json();
       setRequestToken(data.request_token);
-      return data.request_token;
+      return requestToken;
     } catch (error) {
       console.error('Error obteniendo el token de solicitud:', error);
     }
