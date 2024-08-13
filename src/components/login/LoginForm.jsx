@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './LoginForm.css';  // Importa los estilos específicos para el formulario de inicio de sesión
 
+
+
+
 const Login = () => {
+  const navigate = useNavigate();
   const [requestToken, setRequestToken] = useState(null);
   const [sessionId, setSessionId] = useState(localStorage.getItem('session_id'));
   const [username, setUsername] = useState(localStorage.getItem('username'));
@@ -83,8 +89,8 @@ const Login = () => {
     <>
       {username ? (
         <div>
-          <button className="user-button">
-            {username}
+          <button className="user-button" onClick={() => navigate('/profile')}>
+  {username}
           </button>
           <button className="logout-button" onClick={handleLogout}>
             Cerrar Sesión
