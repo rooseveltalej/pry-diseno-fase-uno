@@ -1,5 +1,6 @@
 // UserProfile.jsx
 import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import FavoriteMovies from './FavoriteMovies';
 import FavoriteTvShows from './FavoriteTvShows';
 
@@ -38,4 +39,10 @@ return (
 );
 };
 
+UserProfile.propTypes = {
+    sessionId: PropTypes.string.isRequired,
+  };
+
 export default UserProfile;
+
+

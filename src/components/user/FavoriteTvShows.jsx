@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import propTypes from 'prop-types'
+
 
 const FavoriteTvShows = ({sessionId, apiKey}) => {
     const [favoriteTv, setFavoriteTv] = useState([]);
@@ -27,6 +29,11 @@ return (
             </ul>
             </div>
 )
+}
+
+FavoriteTvShows.propTypes = {
+    sessionId: propTypes.string.isRequired,
+    apiKey: propTypes.string.isRequired
 }
 
 export default FavoriteTvShows

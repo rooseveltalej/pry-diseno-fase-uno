@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import propTypes from 'prop-types'
 
 const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL API KEY
     const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -29,6 +30,11 @@ const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL AP
         </ul>
       </div>
   )
+}
+
+FavoriteMovies.propTypes = {
+    sessionId: propTypes.string.isRequired,
+    apiKey: propTypes.string.isRequired
 }
 
 export default FavoriteMovies
