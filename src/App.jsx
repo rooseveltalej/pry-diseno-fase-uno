@@ -9,13 +9,16 @@ import useFetchTrendingTVShows from './hooks/useFetchTrendingTVShows';
 import useFetchGenres from './hooks/useFetchGenres';
 import useSearchMovies from './hooks/useSearchMovies';
 import useSearchTVShows from './hooks/useSearchTVShows';
+import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
+import { showMovieDetails, showTvShowDetails, closeModal, closeModalShow } from './utils/modalHandlers';
+import { goBackToTrending } from './utils/navigationHandlers';
 import './App.css';
 import './Responsive.css';
 
 const App = () => {
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
-  const { trendingMovies} = useFetchTrendingMovies(apiKey);
-  const { trendingTVShows} = useFetchTrendingTVShows(apiKey);
+  const { trendingMovies } = useFetchTrendingMovies(apiKey);
+  const { trendingTVShows } = useFetchTrendingTVShows(apiKey);
   const { movieGenres, tvGenres } = useFetchGenres(apiKey);
   const { movies, searchMovie } = useSearchMovies(apiKey);
   const { shows, searchTVShows } = useSearchTVShows(apiKey);
@@ -25,108 +28,56 @@ const App = () => {
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const handleMovieSearchChange = (query) => {
-    if (!query) {
-      setShowSearchResults(false);
-      return;
-    }
-    searchMovie(query);
-    setSearchType('movie');
-    setShowSearchResults(true);
-  };
-
-  const handleTVSearchChange = (query) => {
-    if (!query) {
-      setShowSearchResults(false);
-      return;
-    }
-    searchTVShows(query);
-    setSearchType('tv');
-    setShowSearchResults(true);
-  };
-
-  const showMovieDetails = async (movieId) => {
-    try {
-      const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos`);
-      const data = await response.json();
-      setSelectedMovie(data);
-      setSelectedShow(null);
-    } catch (error) {
-      console.error('Error fetching movie details:', error);
-    }
-  };
-
-  const showTvShowDetails = async (showId) => {
-    try {
-      const response = await fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos`);
-      const data = await response.json();
-      setSelectedShow(data);
-    } catch (error) {
-      console.error('Error fetching TV show details:', error);
-    }
-  };
-
-  const handleGenreChange = (genreId) => {
-    if (!genreId) {
-      setShowSearchResults(false);
-      return;
-    }
-    searchMovie('', genreId);
-    setSearchType('movie');
-    setShowSearchResults(true);
-  };
-
-  const handleTVShowGenreChange = (genreId) => {
-    if (!genreId) {
-      setShowSearchResults(false);
-      return;
-    }
-    searchTVShows('', genreId);
-    setSearchType('tv');
-    setShowSearchResults(true);
-  };
-
-  const closeModal = () => setSelectedMovie(null);
-  const closeModalShow = () => setSelectedShow(null);
-  const goBackToTrending = () => {
-    setShowSearchResults(false);
-    setSearchType('');
-  };
-
   return (
     <div className="app-container">
       <Header 
-        onSearch={handleMovieSearchChange} 
-        onSearchTVShows={handleTVSearchChange} 
+        onSearch={(query) => handleMovieSearchChange(query, searchMovie, setSearchType, setShowSearchResults)} 
+        onSearchTVShows={(query) => handleTVSearchChange(query, searchTVShows, setSearchType, setShowSearchResults)} 
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
-        onGenreChange={handleGenreChange} 
-        onTVShowGenreChange={handleTVShowGenreChange} 
-      />
+        onGenreChange={(genre) => {
+          if (!genre) {
+            setShowSearchResults(false);
+            return;
+          }
+          searchMovie('', genre);
+          setSearchType('movie');
+          setShowSearchResults(true);
+        }} 
+        onTVShowGenreChange={(genre) => {
+          if (!genre) {
+            setShowSearchResults(false);
+            return;
+          }
+          searchTVShows('', genre);
+          setSearchType('tv');
+          setShowSearchResults(true);
+        }} 
+/>
       {showSearchResults ? (
         <>
           <h2>Resultados de la Búsqueda</h2>
           <div className="button-container">
-            <button className="back-to-trending-button" onClick={goBackToTrending}>
+            <button className="back-to-trending-button" onClick={() => goBackToTrending(setShowSearchResults, setSearchType)}>
               Volver a Tendencias
             </button>
           </div>
           {searchType === 'movie' ? (
-            <MovieList movies={movies} onMovieClick={showMovieDetails} />
+            <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} />
           ) : (
-            <TVShowList shows={shows} onShowClick={showTvShowDetails} />
+            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} />
           )}
         </>
       ) : (
         <>
           <h2>Películas en Tendencia</h2>
-          <MovieList movies={trendingMovies} onMovieClick={showMovieDetails} />
+          <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} />
           <h2>Series en Tendencia</h2>
-          <TVShowList shows={trendingTVShows} onShowClick={showTvShowDetails} />
+          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} />
         </>
       )}
-      {selectedShow && <TvShowModal show={selectedShow} onClose={closeModalShow} />}
-      {selectedMovie && <MovieModal movie={selectedMovie} onClose={closeModal} />}
+      {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} />}
+      {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} />}
     </div>
   );
 }
