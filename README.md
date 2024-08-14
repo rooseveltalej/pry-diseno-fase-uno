@@ -1,10 +1,15 @@
-# React + Vite
+![Logo](public/Logo2.jpeg)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Movie and TV Show Search App
 
-Currently, two official plugins are available:
+Welcome to the Movie and TV Show Search App! This is a web application that allows users to search for movies and TV shows using the TMDB (The Movie Database) API. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-Prueba
+- **Search for Movies:** Find detailed information about movies based on your search criteria.
+- **Search for TV Shows:** Discover TV shows and get information about them using the search functionality.
+- **Trending Content:** View trending movies and TV shows by genre.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
