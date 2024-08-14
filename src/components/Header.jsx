@@ -1,31 +1,34 @@
 import PropTypes from 'prop-types';
 import LoginForm from './login/LoginForm';
 
-const Header = ({ onSearch, genres, onGenreChange }) => {
+const Header = ({ onSearch, movieGenres, tvGenres, onGenreChange, onTVShowGenreChange }) => {
   const handleSearch = (event) => {
     onSearch(event.target.value);
   };
 
-  const handleGenreChange = (event) => {
+  const handleMovieGenreChange = (event) => {
     onGenreChange(event.target.value);
+  };
+
+  const handleTVShowGenreChange = (event) => {
+    onTVShowGenreChange(event.target.value);
   };
 
   return (
     <header>
       <h1>Tecflix</h1>
       <input type="text" placeholder="Buscar..." onInput={handleSearch} />
-      <select onChange={handleGenreChange}>
-        <option value="">Todos los géneros</option>
-        {genres.map((genre) => (
+      <select onChange={handleMovieGenreChange}>
+        <option value="">Todos los géneros (Películas)</option>
+        {movieGenres.map((genre) => (
           <option key={genre.id} value={genre.id}>{genre.name}</option>
         ))}
       </select>
-      {/* Otro select */}
-      <select>
-        <option value="">Esta vara aun no sirve pero aja</option> 
-        <option value="7">Categoria 7+</option>
-        <option value="8">Categoria 8+</option>
-        <option value="9">Categoria 9+</option>
+      <select onChange={handleTVShowGenreChange}>
+        <option value="">Todos los géneros (Series de TV)</option>
+        {tvGenres.map((genre) => (
+          <option key={genre.id} value={genre.id}>{genre.name}</option>
+        ))}
       </select>
       <LoginForm />
     </header>
@@ -34,11 +37,16 @@ const Header = ({ onSearch, genres, onGenreChange }) => {
 
 Header.propTypes = {
   onSearch: PropTypes.func.isRequired,
-  genres: PropTypes.arrayOf(PropTypes.shape({
+  movieGenres: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
-  onGenreChange: PropTypes.func.isRequired, // Agrega esta línea
+  tvGenres: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
+  onGenreChange: PropTypes.func.isRequired,
+  onTVShowGenreChange: PropTypes.func.isRequired,
 };
 
 export default Header;

@@ -9,11 +9,13 @@ import './Responsive.css';
 
 const App = () => {
   const [movies, setMovies] = useState([]);
-  const [shows, setShows] = useState([]); // Estado para las series
+  const [shows, setShows] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
-  const [trendingTVShows, setTrendingTVShows] = useState([]); // Estado para las series en tendencia
-  const [genres, setGenres] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState(''); // Estado para el género seleccionado
+  const [trendingTVShows, setTrendingTVShows] = useState([]);
+  const [movieGenres, setMovieGenres] = useState([]);
+  const [tvGenres, setTVGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedTVShowGenre, setSelectedTVShowGenre] = useState('');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -22,7 +24,7 @@ const App = () => {
   useEffect(() => {
     fetchGenres();
     fetchTrendingMovies();
-    fetchTrendingTVShows(); // Llamar a la función para obtener las series en tendencia
+    fetchTrendingTVShows();
   }, []);
 
   useEffect(() => {
@@ -33,11 +35,26 @@ const App = () => {
     }
   }, [selectedGenre]);
 
+  useEffect(() => {
+    if (selectedTVShowGenre) {
+      fetchTrendingTVShowsByGenre(selectedTVShowGenre);
+    } else {
+      fetchTrendingTVShows();
+    }
+  }, [selectedTVShowGenre]);
+
   const fetchGenres = async () => {
     try {
-      const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
-      const data = await response.json();
-      setGenres(data.genres);
+      // Obtener géneros de películas
+      const movieGenreResponse = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
+      const movieGenreData = await movieGenreResponse.json();
+      setMovieGenres(movieGenreData.genres);
+
+      // Obtener géneros de series
+      const tvGenreResponse = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
+      const tvGenreData = await tvGenreResponse.json();
+      setTVGenres(tvGenreData.genres);
+
     } catch (error) {
       console.error('Error fetching genres:', error);
     }
@@ -73,6 +90,16 @@ const App = () => {
     }
   };
 
+  const fetchTrendingTVShowsByGenre = async (genreId) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=es-ES&with_genres=${genreId}`);
+      const data = await response.json();
+      setTrendingTVShows(data.results);
+    } catch (error) {
+      console.error('Error fetching TV shows by genre:', error);
+    }
+  };
+
   const searchMovie = async (query = '') => {
     try {
       if (!query) {
@@ -82,11 +109,9 @@ const App = () => {
         return;
       }
 
-      // Buscar películas
       const movieResponse = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`);
       const movieData = await movieResponse.json();
 
-      // Buscar series
       const showResponse = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=es-ES&query=${query}`);
       const showData = await showResponse.json();
 
@@ -103,7 +128,7 @@ const App = () => {
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos`);
       const data = await response.json();
       setSelectedMovie(data);
-      setSelectedShow(null); // Asegúrate de limpiar el estado de la serie seleccionada
+      setSelectedShow(null);
     } catch (error) {
       console.error('Error fetching movie details:', error);
     }
@@ -129,13 +154,19 @@ const App = () => {
 
   const goBackToTrending = () => {
     setShowSearchResults(false);
-    setMovies([]); // Opcional: Limpiar los resultados de búsqueda
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Desplazarse suavemente hacia la parte superior
+    setMovies([]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="app-container">
-      <Header onSearch={searchMovie} genres={genres} onGenreChange={setSelectedGenre} />
+      <Header 
+        onSearch={searchMovie} 
+        movieGenres={movieGenres} 
+        tvGenres={tvGenres} 
+        onGenreChange={setSelectedGenre} 
+        onTVShowGenreChange={setSelectedTVShowGenre} 
+      />
       {showSearchResults ? (
         <>
           <h2>Resultados de la Búsqueda</h2>
@@ -143,13 +174,13 @@ const App = () => {
             <button className="back-to-trending-button" onClick={goBackToTrending}>Volver a Tendencias</button>
           </div>
           <MovieList movies={movies} onMovieClick={showMovieDetails} />
-          <TVShowList shows={shows} onShowClick={showTvShowDetails} /> {/* Nueva sección para las series en tendencia */}
+          <TVShowList shows={shows} onShowClick={showTvShowDetails} />
         </>
       ) : (
         <>
           <h2>Películas en Tendencia</h2>
           <MovieList movies={trendingMovies} onMovieClick={showMovieDetails} />
-          <h2>Series en Tendencia</h2> {/* Nueva sección para las series en tendencia */}
+          <h2>Series en Tendencia</h2>
           <TVShowList shows={trendingTVShows} onShowClick={showTvShowDetails} />
         </>
       )}
