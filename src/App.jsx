@@ -31,26 +31,26 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-      if (showSearchResults) {
-        if (searchType === 'movie' && selectedGenre) {
-          searchMovie('', selectedGenre);
-        } else if (searchType === 'tv' && selectedTVShowGenre) {
-          searchTVShows('', selectedTVShowGenre);
-        }
-      } else {
-        if (selectedGenre) {
-          fetchTrendingMoviesByGenre(selectedGenre);
-        } else {
-          fetchTrendingMovies();
-        }
-    
-        if (selectedTVShowGenre) {
-          fetchTrendingTVShowsByGenre(selectedTVShowGenre);
-        } else {
-          fetchTrendingTVShows();
-        }
+    if (showSearchResults) {
+      if (searchType === 'movie' && selectedGenre) {
+        searchMovie('', selectedGenre);
+      } else if (searchType === 'tv' && selectedTVShowGenre) {
+        searchTVShows('', selectedTVShowGenre);
       }
-    }, [selectedGenre, selectedTVShowGenre, searchType, showSearchResults]);
+    } else {
+      if (selectedGenre) {
+        fetchTrendingMoviesByGenre(selectedGenre);
+      } else {
+        fetchTrendingMovies();
+      }
+  
+      if (selectedTVShowGenre) {
+        fetchTrendingTVShowsByGenre(selectedTVShowGenre);
+      } else {
+        fetchTrendingTVShows();
+      }
+    }
+  }, [selectedGenre, selectedTVShowGenre, searchType, showSearchResults]);
 
   const fetchGenres = async () => {
     try {
