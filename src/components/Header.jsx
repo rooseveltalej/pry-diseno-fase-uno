@@ -20,7 +20,7 @@ const Header = ({ onSearch, onSearchTVShows, movieGenres, tvGenres, onGenreChang
 
   return (
     <header>
-      <h1>Tecflix</h1>
+      <h1>TECFLIX</h1>
       <input 
         type="text" 
         placeholder="Buscar películas..." 
