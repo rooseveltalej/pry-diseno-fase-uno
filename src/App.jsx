@@ -14,10 +14,9 @@ import './Responsive.css';
 
 const App = () => {
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
-
-  const { trendingMovies, error: trendingMoviesError, loading: loadingMovies } = useFetchTrendingMovies(apiKey);
-  const { trendingTVShows, error: trendingTVShowsError, loading: loadingTVShows } = useFetchTrendingTVShows(apiKey);
-  const { movieGenres, tvGenres, error: genresError, loading: loadingGenres } = useFetchGenres(apiKey);
+  const { trendingMovies} = useFetchTrendingMovies(apiKey);
+  const { trendingTVShows} = useFetchTrendingTVShows(apiKey);
+  const { movieGenres, tvGenres } = useFetchGenres(apiKey);
   const { movies, searchMovie } = useSearchMovies(apiKey);
   const { shows, searchTVShows } = useSearchTVShows(apiKey);
 
@@ -67,6 +66,26 @@ const App = () => {
     }
   };
 
+  const handleGenreChange = (genreId) => {
+    if (!genreId) {
+      setShowSearchResults(false);
+      return;
+    }
+    searchMovie('', genreId);
+    setSearchType('movie');
+    setShowSearchResults(true);
+  };
+
+  const handleTVShowGenreChange = (genreId) => {
+    if (!genreId) {
+      setShowSearchResults(false);
+      return;
+    }
+    searchTVShows('', genreId);
+    setSearchType('tv');
+    setShowSearchResults(true);
+  };
+
   const closeModal = () => setSelectedMovie(null);
   const closeModalShow = () => setSelectedShow(null);
   const goBackToTrending = () => {
@@ -81,8 +100,8 @@ const App = () => {
         onSearchTVShows={handleTVSearchChange} 
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
-        onGenreChange={(genre) => searchMovie('', genre)} 
-        onTVShowGenreChange={(genre) => searchTVShows('', genre)} 
+        onGenreChange={handleGenreChange} 
+        onTVShowGenreChange={handleTVShowGenreChange} 
       />
       {showSearchResults ? (
         <>
