@@ -9,12 +9,13 @@ import './Responsive.css';
 
 const App = () => {
   const [movies, setMovies] = useState([]);
-  const [shows, setShows] = useState([]); // Nuevo estado para las series
+  const [shows, setShows] = useState([]); // Estado para las series
   const [trendingMovies, setTrendingMovies] = useState([]);
-  const [trendingTVShows, setTrendingTVShows] = useState([]); // Nuevo estado para las series en tendencia
+  const [trendingTVShows, setTrendingTVShows] = useState([]); // Estado para las series en tendencia
   const [genres, setGenres] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState(''); // Estado para el género seleccionado
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [selectedShow, setSelectedShow] = useState(null); 
+  const [selectedShow, setSelectedShow] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
 
@@ -23,6 +24,14 @@ const App = () => {
     fetchTrendingMovies();
     fetchTrendingTVShows(); // Llamar a la función para obtener las series en tendencia
   }, []);
+
+  useEffect(() => {
+    if (selectedGenre) {
+      fetchTrendingMoviesByGenre(selectedGenre);
+    } else {
+      fetchTrendingMovies();
+    }
+  }, [selectedGenre]);
 
   const fetchGenres = async () => {
     try {
@@ -44,6 +53,16 @@ const App = () => {
     }
   };
 
+  const fetchTrendingMoviesByGenre = async (genreId) => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${genreId}`);
+      const data = await response.json();
+      setTrendingMovies(data.results);
+    } catch (error) {
+      console.error('Error fetching movies by genre:', error);
+    }
+  };
+
   const fetchTrendingTVShows = async () => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/trending/tv/week?api_key=${apiKey}&language=es-ES`);
@@ -62,15 +81,15 @@ const App = () => {
         setShows([]);
         return;
       }
-  
+
       // Buscar películas
       const movieResponse = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`);
       const movieData = await movieResponse.json();
-  
+
       // Buscar series
       const showResponse = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=es-ES&query=${query}`);
       const showData = await showResponse.json();
-  
+
       setMovies(movieData.results);
       setShows(showData.results);
       setShowSearchResults(true);
@@ -78,7 +97,6 @@ const App = () => {
       console.error('Error searching:', error);
     }
   };
-  
 
   const showMovieDetails = async (movieId) => {
     try {
@@ -99,7 +117,7 @@ const App = () => {
     } catch (error) {
       console.error('Error fetching TV show details:', error);
     }
-  }
+  };
 
   const closeModal = () => {
     setSelectedMovie(null);
@@ -107,8 +125,7 @@ const App = () => {
 
   const closeModalShow = () => {
     setSelectedShow(null);
-  }
-
+  };
 
   const goBackToTrending = () => {
     setShowSearchResults(false);
@@ -118,7 +135,7 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Header onSearch={searchMovie} genres={genres} />
+      <Header onSearch={searchMovie} genres={genres} onGenreChange={setSelectedGenre} />
       {showSearchResults ? (
         <>
           <h2>Resultados de la Búsqueda</h2>
@@ -136,7 +153,6 @@ const App = () => {
           <TVShowList shows={trendingTVShows} onShowClick={showTvShowDetails} />
         </>
       )}
-      {}
       {selectedShow && <TvShowModal show={selectedShow} onClose={closeModalShow} />}
       {selectedMovie && <MovieModal movie={selectedMovie} onClose={closeModal} />}
     </div>
