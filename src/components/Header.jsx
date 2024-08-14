@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import LoginForm from './login/LoginForm';
 
-const Header = ({ onSearch, onSearchTVShows, movieGenres, tvGenres, onGenreChange, onTVShowGenreChange }) => {
-  const handleSearch = (event) => {
+const Header = ({ onSearch, onSearchTVShows, movieGenres, tvGenres, onGenreChange, onTVShowGenreChange, movieSearchQuery, tvSearchQuery }) => {
+  const handleMovieSearch = (event) => {
     onSearch(event.target.value);
   };
 
@@ -21,8 +21,18 @@ const Header = ({ onSearch, onSearchTVShows, movieGenres, tvGenres, onGenreChang
   return (
     <header>
       <h1>Tecflix</h1>
-      <input type="text" placeholder="Buscar películas..." onInput={handleSearch} />
-      <input type="text" placeholder="Buscar series..." onInput={handleTVSearch} />
+      <input 
+        type="text" 
+        placeholder="Buscar películas..." 
+        value={movieSearchQuery}
+        onInput={handleMovieSearch} 
+      />
+      <input 
+        type="text" 
+        placeholder="Buscar series..." 
+        value={tvSearchQuery}
+        onInput={handleTVSearch} 
+      />
       <select onChange={handleMovieGenreChange}>
         <option value="">Todos los géneros (Películas)</option>
         {movieGenres.map((genre) => (
@@ -53,6 +63,8 @@ Header.propTypes = {
   })).isRequired,
   onGenreChange: PropTypes.func.isRequired,
   onTVShowGenreChange: PropTypes.func.isRequired,
+  movieSearchQuery: PropTypes.string.isRequired,
+  tvSearchQuery: PropTypes.string.isRequired,
 };
 
 export default Header;

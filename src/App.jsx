@@ -17,6 +17,8 @@ const App = () => {
   const [selectedGenre, setSelectedGenre] = useState(''); // Para películas
   const [selectedTVShowGenre, setSelectedTVShowGenre] = useState(''); // Para series de TV
   const [searchType, setSearchType] = useState(''); // Tipo de búsqueda ('movie' o 'tv')
+  const [movieSearchQuery, setMovieSearchQuery] = useState(''); // Valor del campo de búsqueda de películas
+  const [tvSearchQuery, setTVSearchQuery] = useState(''); // Valor del campo de búsqueda de series
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -30,25 +32,25 @@ const App = () => {
 
   useEffect(() => {
       if (showSearchResults) {
-          if (searchType === 'movie' && selectedGenre) {
-              searchMovie('', selectedGenre);
-          } else if (searchType === 'tv' && selectedTVShowGenre) {
-              searchTVShows('', selectedTVShowGenre);
-          }
+        if (searchType === 'movie' && selectedGenre) {
+          searchMovie('', selectedGenre);
+        } else if (searchType === 'tv' && selectedTVShowGenre) {
+          searchTVShows('', selectedTVShowGenre);
+        }
       } else {
-          if (selectedGenre) {
-              fetchTrendingMoviesByGenre(selectedGenre);
-          } else {
-              fetchTrendingMovies();
-          }
-  
-          if (selectedTVShowGenre) {
-              fetchTrendingTVShowsByGenre(selectedTVShowGenre);
-          } else {
-              fetchTrendingTVShows();
-          }
+        if (selectedGenre) {
+          fetchTrendingMoviesByGenre(selectedGenre);
+        } else {
+          fetchTrendingMovies();
+        }
+    
+        if (selectedTVShowGenre) {
+          fetchTrendingTVShowsByGenre(selectedTVShowGenre);
+        } else {
+          fetchTrendingTVShows();
+        }
       }
-  }, [selectedGenre, selectedTVShowGenre, searchType, showSearchResults]);
+    }, [selectedGenre, selectedTVShowGenre, searchType, showSearchResults]);
 
   const fetchGenres = async () => {
     try {
@@ -157,6 +159,18 @@ const App = () => {
     }
   };
 
+  const handleMovieSearchChange = (query) => {
+    setMovieSearchQuery(query);
+    setTVSearchQuery(''); // Limpiar el campo de búsqueda de series
+    searchMovie(query);
+  };
+
+  const handleTVSearchChange = (query) => {
+    setTVSearchQuery(query);
+    setMovieSearchQuery(''); // Limpiar el campo de búsqueda de películas
+    searchTVShows(query);
+  };
+
   const showMovieDetails = async (movieId) => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&language=es-ES&append_to_response=credits,videos`);
@@ -191,18 +205,22 @@ const App = () => {
     setMovies([]);
     setShows([]);
     setSearchType('');
+    setMovieSearchQuery(''); // Limpiar el campo de búsqueda de películas
+    setTVSearchQuery(''); // Limpiar el campo de búsqueda de series
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="app-container">
       <Header 
-        onSearch={searchMovie} 
-        onSearchTVShows={searchTVShows} 
+        onSearch={handleMovieSearchChange} 
+        onSearchTVShows={handleTVSearchChange} 
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
         onGenreChange={setSelectedGenre} 
         onTVShowGenreChange={setSelectedTVShowGenre} 
+        movieSearchQuery={movieSearchQuery}
+        tvSearchQuery={tvSearchQuery}
       />
       {showSearchResults ? (
         <>
