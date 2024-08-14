@@ -12,10 +12,11 @@ const App = () => {
   const [shows, setShows] = useState([]);
   const [trendingMovies, setTrendingMovies] = useState([]);
   const [trendingTVShows, setTrendingTVShows] = useState([]);
-  const [movieGenres, setMovieGenres] = useState([]);
-  const [tvGenres, setTVGenres] = useState([]);
-  const [selectedGenre, setSelectedGenre] = useState('');
-  const [selectedTVShowGenre, setSelectedTVShowGenre] = useState('');
+  const [movieGenres, setMovieGenres] = useState([]); // Géneros de películas
+  const [tvGenres, setTVGenres] = useState([]); // Géneros de series
+  const [selectedGenre, setSelectedGenre] = useState(''); // Para películas
+  const [selectedTVShowGenre, setSelectedTVShowGenre] = useState(''); // Para series de TV
+  const [searchType, setSearchType] = useState(''); // Tipo de búsqueda ('movie' o 'tv')
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -28,29 +29,33 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedGenre) {
-      fetchTrendingMoviesByGenre(selectedGenre);
-    } else {
-      fetchTrendingMovies();
-    }
-  }, [selectedGenre]);
-
-  useEffect(() => {
-    if (selectedTVShowGenre) {
-      fetchTrendingTVShowsByGenre(selectedTVShowGenre);
-    } else {
-      fetchTrendingTVShows();
-    }
-  }, [selectedTVShowGenre]);
+      if (showSearchResults) {
+          if (searchType === 'movie' && selectedGenre) {
+              searchMovie('', selectedGenre);
+          } else if (searchType === 'tv' && selectedTVShowGenre) {
+              searchTVShows('', selectedTVShowGenre);
+          }
+      } else {
+          if (selectedGenre) {
+              fetchTrendingMoviesByGenre(selectedGenre);
+          } else {
+              fetchTrendingMovies();
+          }
+  
+          if (selectedTVShowGenre) {
+              fetchTrendingTVShowsByGenre(selectedTVShowGenre);
+          } else {
+              fetchTrendingTVShows();
+          }
+      }
+  }, [selectedGenre, selectedTVShowGenre, searchType, showSearchResults]);
 
   const fetchGenres = async () => {
     try {
-      // Obtener géneros de películas
       const movieGenreResponse = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=es-ES`);
       const movieGenreData = await movieGenreResponse.json();
       setMovieGenres(movieGenreData.genres);
 
-      // Obtener géneros de series
       const tvGenreResponse = await fetch(`https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=es-ES`);
       const tvGenreData = await tvGenreResponse.json();
       setTVGenres(tvGenreData.genres);
@@ -100,26 +105,55 @@ const App = () => {
     }
   };
 
-  const searchMovie = async (query = '') => {
+  const searchMovie = async (query = '', genreId = '') => {
     try {
-      if (!query) {
+      if (!query && !genreId) {
         setShowSearchResults(false);
         setMovies([]);
         setShows([]);
         return;
       }
 
-      const movieResponse = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`);
+      let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`;
+      if (genreId) {
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${genreId}&query=${query}`;
+      }
+
+      const movieResponse = await fetch(url);
       const movieData = await movieResponse.json();
 
-      const showResponse = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=es-ES&query=${query}`);
-      const showData = await showResponse.json();
-
       setMovies(movieData.results);
-      setShows(showData.results);
+      setShows([]);
+      setSearchType('movie');
       setShowSearchResults(true);
     } catch (error) {
-      console.error('Error searching:', error);
+      console.error('Error searching movies:', error);
+    }
+  };
+
+  const searchTVShows = async (query = '', genreId = '') => {
+    try {
+      if (!query && !genreId) {
+        setShowSearchResults(false);
+        setMovies([]);
+        setShows([]);
+        return;
+      }
+
+      let url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=es-ES&query=${query}`;
+      if (genreId) {
+        url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=es-ES&with_genres=${genreId}&query=${query}`;
+      }
+
+      const showResponse = await fetch(url);
+      const showData = await showResponse.json();
+
+      setShows(showData.results);
+      setMovies([]);
+      setSearchType('tv');
+      setShowSearchResults(true);
+    } catch (error) {
+      console.error('Error searching TV shows:', error);
     }
   };
 
@@ -155,6 +189,8 @@ const App = () => {
   const goBackToTrending = () => {
     setShowSearchResults(false);
     setMovies([]);
+    setShows([]);
+    setSearchType('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -162,6 +198,7 @@ const App = () => {
     <div className="app-container">
       <Header 
         onSearch={searchMovie} 
+        onSearchTVShows={searchTVShows} 
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
         onGenreChange={setSelectedGenre} 
@@ -173,8 +210,11 @@ const App = () => {
           <div className="button-container">
             <button className="back-to-trending-button" onClick={goBackToTrending}>Volver a Tendencias</button>
           </div>
-          <MovieList movies={movies} onMovieClick={showMovieDetails} />
-          <TVShowList shows={shows} onShowClick={showTvShowDetails} />
+          {searchType === 'movie' ? (
+            <MovieList movies={movies} onMovieClick={showMovieDetails} />
+          ) : (
+            <TVShowList shows={shows} onShowClick={showTvShowDetails} />
+          )}
         </>
       ) : (
         <>
