@@ -12,7 +12,7 @@ const Header = ({ onSearch, genres, onGenreChange }) => {
 
   return (
     <header>
-      <h1>MovieTEC</h1>
+      <h1>Tecflix</h1>
       <input type="text" placeholder="Buscar..." onInput={handleSearch} />
       <select onChange={handleGenreChange}>
         <option value="">Todos los géneros</option>

@@ -1,47 +1,72 @@
 .login-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 40px;
-    border: 2px solid #007BFF;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.25);
-    text-align: center;
-    background-color: #f8f9fa;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .login-title {
-    margin-bottom: 30px;
-    color: #343a40;
-    font-size: 24px;
-  }
-  
-  .login-button {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .logout-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  .logout-button:hover {
-    background-color: darkred;
-  }
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  background-color: #1e1e1e;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-title {
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.login-button {
+  padding: 12px;
+  cursor: pointer;
+  background-color: #0056b3;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.login-button:hover {
+  background-color: #003d80;
+  transform: translateY(-2px);
+}
+
+.logout-button {
+  background-color: #da0c0c;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.logout-button:hover {
+  background-color: #da0c0c;
+  transform: translateY(-2px);
+}
+
+.user-button {
+  background-color: #333;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.user-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
