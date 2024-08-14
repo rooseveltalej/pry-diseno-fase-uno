@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import propTypes from 'prop-types'
+import propTypes from 'prop-types';
+import { useEffect, useState } from "react";
 
 
 const FavoriteTvShows = ({sessionId, apiKey}) => {

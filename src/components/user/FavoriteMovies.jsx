@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
-import propTypes from 'prop-types'
+import propTypes from 'prop-types';
+import { useEffect, useState } from "react";
 import MovieList from "../MovieList";
-import './FavoriteMovies.css'
+import './FavoriteMovies.css';
 
 const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL API KEY
     const [favoriteMovies, setFavoriteMovies] = useState([]);

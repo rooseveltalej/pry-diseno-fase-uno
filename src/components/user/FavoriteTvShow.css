@@ -1,0 +1,20 @@
+.favorite-tvshows {
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.favorite-tvshows h3 {
+    font-size: 24px;
+    color: white;
+    border-bottom: 3px solid #28a745; /* Cambiado el color del borde para diferenciarlo de las películas */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.tvshow-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}

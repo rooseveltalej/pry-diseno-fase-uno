@@ -9,7 +9,7 @@ const Header = ({ onSearch, genres }) => {
   return (
     <header>
       <h1>MovieTEC</h1>
-      <input type="text" placeholder="Buscar películas..." onInput={handleSearch} />
+      <input type="text" placeholder="Buscar..." onInput={handleSearch} />
       <select>
         <option value="">Todos los géneros</option>
         {genres.map((genre) => (

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import './LoginForm.css';  // Importa los estilos específicos para el formulario de inicio de sesión
+import './LoginForm.css'; // Importa los estilos específicos para el formulario de inicio de sesión
 
 
 
@@ -57,7 +57,7 @@ const Login = () => {
       const response = await fetch(`https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`);
       const data = await response.json();
       setRequestToken(data.request_token);
-      return requestToken;
+      return data.request_token;
     } catch (error) {
       console.error('Error obteniendo el token de solicitud:', error);
     }
