@@ -1,37 +1,45 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from "react";
-import TVShowList from "../TvShowList";
-import './FavoriteTvShow.css';
+import TVShowList from '../TvShowList';
+import './css/FavoriteTvShow.css';
+import useFetchLists from '../../hooks/useFetchLists';
 
-const FavoriteTVShows = ({ sessionId, apiKey }) => { // RECIBE EL SESSION ID Y EL API KEY
-    const [favoriteTVShows, setFavoriteTVShows] = useState([]);
+const FavoriteTvShows = ({ sessionId, apiKey }) => {
+    const { lists, error, loading } = useFetchLists(apiKey, sessionId);
 
-    useEffect(() => {
-        // Obtener la lista de programas de televisión favoritos del usuario
-        const fetchFavoriteTVShows = async () => {
-            try {
-                const response = await fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=${apiKey}&session_id=${sessionId}`);
-                const data = await response.json();
-                setFavoriteTVShows(data.results);
-            } catch (error) {
-                console.error('Error obteniendo la lista de programas de televisión favoritos:', error);
-            }
-        };
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
-        fetchFavoriteTVShows();
-    }, [apiKey, sessionId]); // Asegurarse de que useEffect se ejecute solo cuando apiKey o sessionId cambie
+    if (error) {
+        return <p>{error}</p>;
+    }
 
     return (
-        <div className="favorite-tvshows">
-            <h3>Mis Programas de Televisión Favoritos</h3>
-            <TVShowList shows={favoriteTVShows} />{/* Se muestra la lista de programas de televisión favoritos */}
+        <div className="favorite-tvshows-container">
+            <h3>Mis Listas Personalizadas</h3>
+            {console.log("mi lista", lists)}
+            {lists.length > 0 ? (
+                lists.map((list) => (
+                    <div key={list.id} className="list-item">
+                        <h4>{list.name}</h4>
+                        <p>{list.description}</p>
+                        {list.items && list.items.length > 0 ? (
+                            <TVShowList shows={list.items} />
+                        ) : (
+                            <p>No hay series en esta lista.</p>
+                        )}
+                    </div>
+                ))
+            ) : (
+                <p>No has creado ninguna lista personalizada.</p>
+            )}
         </div>
     );
 };
 
-FavoriteTVShows.propTypes = {
+FavoriteTvShows.propTypes = {
     sessionId: PropTypes.string.isRequired,
     apiKey: PropTypes.string.isRequired
 };
 
-export default FavoriteTVShows;
+export default FavoriteTvShows;

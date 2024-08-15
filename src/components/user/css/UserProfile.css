@@ -1,0 +1,18 @@
+.user-profile-container {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 250px; /* Espacio igual al ancho de la barra lateral para que no quede detrás */
+    padding: 20px;
+}
+
+.user-content {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.user-info {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd; /* Separador para claridad visual */
+    text-align: center;
+}

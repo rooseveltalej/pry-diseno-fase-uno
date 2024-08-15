@@ -1,7 +1,8 @@
 import propTypes from 'prop-types';
 import { useEffect, useState } from "react";
 import MovieList from "../MovieList";
-import './FavoriteMovies.css';
+import './css/FavoriteMovies.css';
+import { showMovieDetails } from '../../utils/modalHandlers';
 
 const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL API KEY
     const [favoriteMovies, setFavoriteMovies] = useState([]);
@@ -24,7 +25,7 @@ const FavoriteMovies = ({sessionId, apiKey}) => { //RECIBE EL SESSION ID Y EL AP
   return (
     <div className="favorite-movies">
         <h3>Mis Películas Favoritas</h3>
-        <MovieList movies={favoriteMovies} />{/*TODO, se muestra la carta de peliculas pero no se puede ver más información */}
+        <MovieList movies={favoriteMovies} onMovieClick={showMovieDetails()} />{/*TODO, se muestra la carta de peliculas pero no se puede ver más información */}
       </div>
   )
 }
