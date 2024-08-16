@@ -10,9 +10,8 @@
     padding: 20px;
 }
 
-.user-info {
+.user-info {   
     margin-bottom: 20px;
     padding-bottom: 20px;
-    border-bottom: 1px solid #ddd; /* Separador para claridad visual */
     text-align: center;
 }
