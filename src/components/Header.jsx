@@ -57,7 +57,7 @@ const Header = ({
         onChange={handleSearchChange} 
       />
       <select onChange={handleGenreChange}>
-        <option value="">Todos los géneros ({searchType === 'movies' ? 'Películas' : 'Series de TV'})</option>
+        <option value="">Tendencias</option>
         {(searchType === 'movies' ? movieGenres : tvGenres).map((genre) => (
           <option key={genre.id} value={genre.id}>{genre.name}</option>
         ))}
