@@ -1,47 +1,64 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import LoginForm from './login/LoginForm';
 
-const Header = ({ onSearch, onSearchTVShows, movieGenres, tvGenres, onGenreChange, onTVShowGenreChange, movieSearchQuery, tvSearchQuery }) => {
-  const handleMovieSearch = (event) => {
-    onSearch(event.target.value);
+const Header = ({
+  onSearch,
+  onSearchTVShows,
+  movieGenres,
+  tvGenres,
+  onGenreChange,
+  onTVShowGenreChange,
+  movieSearchQuery,
+  tvSearchQuery,
+}) => {
+  const [searchType, setSearchType] = useState('movies');
+  const [query, setQuery] = useState('');
+
+  const handleSearchChange = (event) => {
+    setQuery(event.target.value);
+    if (searchType === 'movies') {
+      onSearch(event.target.value);
+    } else {
+      onSearchTVShows(event.target.value);
+    }
   };
 
-  const handleTVSearch = (event) => {
-    onSearchTVShows(event.target.value);
+  const handleSearchTypeChange = (event) => {
+    setSearchType(event.target.value);
+    setQuery('');
+    // Clear search query when switching types
+    if (event.target.value === 'movies') {
+      onSearch('');
+    } else {
+      onSearchTVShows('');
+    }
   };
 
-  const handleMovieGenreChange = (event) => {
-    onGenreChange(event.target.value);
-  };
-
-  const handleTVShowGenreChange = (event) => {
-    onTVShowGenreChange(event.target.value);
+  const handleGenreChange = (event) => {
+    if (searchType === 'movies') {
+      onGenreChange(event.target.value);
+    } else {
+      onTVShowGenreChange(event.target.value);
+    }
   };
 
   return (
     <header>
       <h1>TECFLIX</h1>
-      <input 
-        type="text" 
-        placeholder="Buscar películas..." 
-        value={movieSearchQuery}
-        onInput={handleMovieSearch} 
-      />
-      <input 
-        type="text" 
-        placeholder="Buscar series..." 
-        value={tvSearchQuery}
-        onInput={handleTVSearch} 
-      />
-      <select onChange={handleMovieGenreChange}>
-        <option value="">Todos los géneros (Películas)</option>
-        {movieGenres.map((genre) => (
-          <option key={genre.id} value={genre.id}>{genre.name}</option>
-        ))}
+      <select onChange={handleSearchTypeChange} value={searchType}>
+        <option value="movies">Películas</option>
+        <option value="tvshows">Series de TV</option>
       </select>
-      <select onChange={handleTVShowGenreChange}>
-        <option value="">Todos los géneros (Series de TV)</option>
-        {tvGenres.map((genre) => (
+      <input 
+        type="text" 
+        placeholder={`Buscar ${searchType === 'movies' ? 'películas' : 'series...'}...`} 
+        value={query}
+        onChange={handleSearchChange} 
+      />
+      <select onChange={handleGenreChange}>
+        <option value="">Todos los géneros ({searchType === 'movies' ? 'Películas' : 'Series de TV'})</option>
+        {(searchType === 'movies' ? movieGenres : tvGenres).map((genre) => (
           <option key={genre.id} value={genre.id}>{genre.name}</option>
         ))}
       </select>

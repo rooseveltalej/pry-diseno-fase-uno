@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 const MovieCard = ({ movie, onClick }) => {
-  const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
+const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
 
   return (
     <div className="movie-card" onClick={onClick}>

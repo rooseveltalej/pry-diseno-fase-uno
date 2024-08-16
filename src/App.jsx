@@ -1,19 +1,19 @@
 import { useState } from 'react';
+import './App.css';
 import Header from './components/Header';
 import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
 import TVShowList from './components/TvShowList';
 import TvShowModal from './components/TvShowModal';
+import useFetchGenres from './hooks/useFetchGenres';
 import useFetchTrendingMovies from './hooks/useFetchTrendingMovies';
 import useFetchTrendingTVShows from './hooks/useFetchTrendingTVShows';
-import useFetchGenres from './hooks/useFetchGenres';
 import useSearchMovies from './hooks/useSearchMovies';
 import useSearchTVShows from './hooks/useSearchTVShows';
-import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
-import { showMovieDetails, showTvShowDetails, closeModal, closeModalShow } from './utils/modalHandlers';
-import { goBackToTrending } from './utils/navigationHandlers';
-import './App.css';
 import './Responsive.css';
+import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from './utils/modalHandlers';
+import { goBackToTrending } from './utils/navigationHandlers';
+import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
 
 const App = () => {
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
