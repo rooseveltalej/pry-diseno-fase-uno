@@ -52,7 +52,7 @@ const Header = ({
       </select>
       <input 
         type="text" 
-        placeholder={`Buscar ${searchType === 'movies' ? 'películas' : 'series...'}...`} 
+        placeholder={`Buscar ${searchType === 'movies' ? 'películas' : 'series'}...`} 
         value={query}
         onChange={handleSearchChange} 
       />
