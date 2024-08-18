@@ -5,7 +5,7 @@ const MovieModal = ({ movie, onClose }) => {
     <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li>
   ));
   const video = movie.videos.results.find((vid) => vid.type === 'Trailer');
-  const videoUrl = video ? `https://www.youtube.com/embed/${video.key}` : null;
+  const videoUrl = video ? `https://www.youtube.com/embed/${video.key}` : null; // obtiene el trailer
 
   return (
     <div className="modal" style={{ display: 'flex' }}>
