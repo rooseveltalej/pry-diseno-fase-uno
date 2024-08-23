@@ -1,38 +1,49 @@
-import propTypes from 'prop-types';
 import { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import TvShowList from "../TvShowList";
+import TvShowModal from '../TvShowModal';
 import './css/FavoriteTvShow.css';
-import { showTvShowDetails } from '../../utils/modalHandlers';
+import { showTvShowDetails, closeModalShow } from '../../utils/modalHandlers';
 
-const FavoriteTvShows = ({ sessionId, apiKey }) => { // Recibe el sessionId y apiKey como props
+const FavoriteTvShows = ({ sessionId, apiKey }) => {
     const [favoriteTvShows, setFavoriteTvShows] = useState([]);
+    const [selectedShow, setSelectedShow] = useState(null);
 
     useEffect(() => {
-        // Obtener la lista de series favoritas del usuario
         const fetchFavoriteTvShows = async () => {
             try {
-              const response = await fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=${apiKey}&session_id=${sessionId}`);
-              const data = await response.json();
-              setFavoriteTvShows(data.results);
+                const response = await fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite/tv?api_key=${apiKey}&session_id=${sessionId}`);
+                const data = await response.json();
+                setFavoriteTvShows(data.results);
             } catch (error) {
-              console.error('Error obteniendo la lista de series favoritas:', error);
+                console.error('Error obteniendo la lista de series favoritas:', error);
             }
-          };
+        };
 
-          fetchFavoriteTvShows();
-    }, [apiKey, sessionId]); // Esta vara es para que la API no se llame infinitas veces
+        fetchFavoriteTvShows();
+    }, [apiKey, sessionId]);
 
     return (
         <div className="favorite-tv">
             <h3>Mis Series Favoritas</h3>
-            <TvShowList shows={favoriteTvShows} onShowClick={showTvShowDetails} /> {}
+            <TvShowList 
+                shows={favoriteTvShows} 
+                onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+            />
+            {selectedShow && (
+                <TvShowModal 
+                    show={selectedShow} 
+                    onClose={() => closeModalShow(setSelectedShow)} 
+                    apiKey={apiKey} 
+                />
+            )}
         </div>
-    )
+    );
 }
 
 FavoriteTvShows.propTypes = {
-    sessionId: propTypes.string.isRequired,
-    apiKey: propTypes.string.isRequired
+    sessionId: PropTypes.string.isRequired,
+    apiKey: PropTypes.string.isRequired
 };
 
 export default FavoriteTvShows;

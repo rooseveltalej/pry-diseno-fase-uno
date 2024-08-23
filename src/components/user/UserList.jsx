@@ -1,11 +1,17 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TVShowList from '../TvShowList';
 import MovieList from '../MovieList';
+import MovieModal from '../MovieModal';
+import TvShowModal from '../TvShowModal';
 import './css/FavoriteTvShow.css';
 import useFetchLists from '../../hooks/useFetchLists';
+import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from '../../utils/modalHandlers';
 
-const FavoriteTvShows = ({ sessionId, apiKey }) => {
+const UserList = ({ sessionId, apiKey }) => {
     const { lists, error, loading } = useFetchLists(apiKey, sessionId);
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [selectedShow, setSelectedShow] = useState(null);
 
     if (loading) {
         return <p>Loading...</p>;
@@ -18,10 +24,8 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
     return (
         <div className="favorite-tvshows-container">
             <h3>Mis Listas Personalizadas</h3>
-            {console.log("mi lista", lists)}
             {lists.length > 0 ? (
                 lists.map((list) => {
-                    // Filtrar series de TV y películas
                     const tvShows = list.items.filter(item => item.media_type === 'tv');
                     const movies = list.items.filter(item => item.media_type === 'movie');
 
@@ -33,7 +37,10 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
                             {tvShows.length > 0 ? (
                                 <>
                                     <h5>Series de TV</h5>
-                                    <TVShowList shows={tvShows} />
+                                    <TVShowList 
+                                        shows={tvShows} 
+                                        onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+                                    />
                                 </>
                             ) : (
                                 <p>No hay series en esta lista.</p>
@@ -42,7 +49,10 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
                             {movies.length > 0 ? (
                                 <>
                                     <h5>Películas</h5>
-                                    <MovieList movies={movies} />
+                                    <MovieList 
+                                        movies={movies} 
+                                        onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} 
+                                    />
                                 </>
                             ) : (
                                 <p>No hay películas en esta lista.</p>
@@ -53,13 +63,15 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
             ) : (
                 <p>No has creado ninguna lista personalizada.</p>
             )}
+            {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} />}
+            {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} />}
         </div>
     );
 };
 
-FavoriteTvShows.propTypes = {
+UserList.propTypes = {
     sessionId: PropTypes.string.isRequired,
     apiKey: PropTypes.string.isRequired
 };
 
-export default FavoriteTvShows;
+export default UserList;
