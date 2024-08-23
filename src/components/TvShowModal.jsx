@@ -39,8 +39,11 @@ const TvShowModal = ({ show, onClose, apiKey }) => {
   };
 
   const actors = show.credits.cast.slice(0, 5).map((actor) => (
-    <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li>
+    <li key={actor.cast_id}>
+      <span className="actor-name">{actor.name}</span> como {actor.character}
+    </li>
   ));
+
   const video = show.videos.results.find((vid) => vid.type === 'Trailer');
   const videoUrl = video ? `https://www.youtube.com/embed/${video.key}` : null;
 
