@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import MovieCard from './MovieCard';
 
-const MovieList = ({ movies, onMovieClick }) => {
+const MovieList = ({ movies, onMovieClick, language }) => {
   return (
     <main>
       {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} onClick={() => onMovieClick(movie.id)} />
+        <MovieCard key={movie.id} movie={movie} onClick={() => onMovieClick(movie.id)} language={language} />
       ))}
     </main>
   );
@@ -20,6 +20,7 @@ MovieList.propTypes = {
     release_date: PropTypes.string.isRequired,
   })).isRequired,
   onMovieClick: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
 };
 
 export default MovieList;

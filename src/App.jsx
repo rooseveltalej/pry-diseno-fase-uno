@@ -16,17 +16,26 @@ import { goBackToTrending } from './utils/navigationHandlers';
 import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
 
 const App = () => {
+  const [language, setLanguage] = useState('es');
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
-  const { trendingMovies } = useFetchTrendingMovies(apiKey);
-  const { trendingTVShows } = useFetchTrendingTVShows(apiKey);
-  const { movieGenres, tvGenres } = useFetchGenres(apiKey);
-  const { movies, searchMovie } = useSearchMovies(apiKey);
-  const { shows, searchTVShows } = useSearchTVShows(apiKey);
+  const { trendingMovies } = useFetchTrendingMovies(apiKey, language);
+  const { trendingTVShows } = useFetchTrendingTVShows(apiKey, language);
+  const { movieGenres, tvGenres } = useFetchGenres(apiKey, language);
+  const { movies, searchMovie } = useSearchMovies(apiKey, language);
+  const { shows, searchTVShows } = useSearchTVShows(apiKey, language);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+
+  // Text translations
+  const texts = {
+    trendingMovies: language === 'es' ? 'Películas en Tendencia' : 'Trending Movies',
+    trendingTVShows: language === 'es' ? 'Series en Tendencia' : 'Trending TV Shows',
+    searchResults: language === 'es' ? 'Resultados de la Búsqueda' : 'Search Results',
+    backToTrending: language === 'es' ? 'Volver a Tendencias' : 'Back to Trending',
+  };
 
   return (
     <div className="app-container">
@@ -53,33 +62,34 @@ const App = () => {
           setSearchType('tv');
           setShowSearchResults(true);
         }} 
-/>
-      {showSearchResults ? (
-        <>
-          <h2>Resultados de la Búsqueda</h2>
-          <div className="button-container">
-            <button className="back-to-trending-button" onClick={() => goBackToTrending(setShowSearchResults, setSearchType)}>
-              Volver a Tendencias
-            </button>
-          </div>
-          {searchType === 'movie' ? (
-            <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} />
-          ) : (
-            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} />
-          )}
-        </>
-      ) : (
-        <>
-          <h2>Películas en Tendencia</h2>
-          <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} />
-          <h2>Series en Tendencia</h2>
-          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} />
-        </>
-      )}
-      {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} />}
-      {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} />}
+        onLanguageChange={(newLanguage) => setLanguage(newLanguage)} // Cambia el idioma
+      />
+{showSearchResults ? (
+  <>
+    <h2>{texts.searchResults}</h2>
+    <div className="button-container">
+      <button className="back-to-trending-button" onClick={() => goBackToTrending(setShowSearchResults, setSearchType)}>
+        {texts.backToTrending}
+      </button>
+    </div>
+    {searchType === 'movie' ? (
+      <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+    ) : (
+      <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+    )}
+  </>
+) : (
+  <>
+    <h2>{texts.trendingMovies}</h2>
+    <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+    <h2>{texts.trendingTVShows}</h2>
+    <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+  </>
+)}
+{selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}
+{selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
     </div>
   );
 }
- 
+
 export default App;

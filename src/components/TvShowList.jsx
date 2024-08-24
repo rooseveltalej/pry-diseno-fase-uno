@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import TVShowCard from './TvShowCard';
 
-const TVShowList = ({ shows, onShowClick }) => {
+const TVShowList = ({ shows, onShowClick, language }) => {
   return (
     <main>
       {shows.map((show) => (
-        <TVShowCard key={show.id} show={show} onClick={() => onShowClick(show.id)} />
+        <TVShowCard key={show.id} show={show} onClick={() => onShowClick(show.id)} language={language} />
       ))}
     </main>
   );
@@ -20,6 +20,7 @@ TVShowList.propTypes = {
     first_air_date: PropTypes.string.isRequired,
   })).isRequired,
   onShowClick: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
 };
 
 export default TVShowList;

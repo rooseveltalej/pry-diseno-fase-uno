@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-const TvShowModal = ({ show, onClose, apiKey }) => {
+const TvShowModal = ({ show, onClose, apiKey, language }) => {
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
@@ -9,14 +9,15 @@ const TvShowModal = ({ show, onClose, apiKey }) => {
   const fetchReviews = async () => {
     setLoadingReviews(true);
     try {
-      let response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=es-ES`);
+      let response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=${language}`);
       let data = await response.json();
-
+  
+      // Si no hay reseñas en el idioma seleccionado, buscar en inglés
       if (!data.results || data.results.length === 0) {
         response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=en-US`);
         data = await response.json();
       }
-
+  
       setReviews(data.results);
       setShowReviews(true);
     } catch (error) {
@@ -39,13 +40,21 @@ const TvShowModal = ({ show, onClose, apiKey }) => {
   };
 
   const actors = show.credits.cast.slice(0, 5).map((actor) => (
-    <li key={actor.cast_id}>
-      <span className="actor-name">{actor.name}</span> como {actor.character}
-    </li>
+    language === 'es' ? <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li> :
+    <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> as {actor.character}</li>
   ));
 
   const video = show.videos.results.find((vid) => vid.type === 'Trailer');
   const videoUrl = video ? `https://www.youtube.com/embed/${video.key}` : null;
+
+  // Text translations
+  const texts = {
+    actors: language === 'es' ? 'Actores' : 'Actors',
+    reviews: language === 'es' ? 'Reseñas' : 'Reviews',
+    loadingReviews: language === 'es' ? 'Cargando reseñas...' : 'Loading reviews...',
+    showReviews: language === 'es' ? 'Ver reseñas' : 'Show reviews',
+    hideReviews: language === 'es' ? 'Ocultar reseñas' : 'Hide reviews',
+  };
 
   return (
     <div className="modal" style={{ display: 'flex' }}>
@@ -53,7 +62,7 @@ const TvShowModal = ({ show, onClose, apiKey }) => {
         <span className="close-btn" onClick={onClose}>&times;</span>
         <h2>{show.name}</h2>
         <p>{show.overview}</p>
-        <h3>Actores</h3>
+        <h3>{texts.actors}</h3>
         <ul className="actor-list">{actors}</ul>
         {videoUrl && (
           <div className="video-container">
@@ -61,11 +70,11 @@ const TvShowModal = ({ show, onClose, apiKey }) => {
           </div>
         )}
         <button onClick={toggleReviews} disabled={loadingReviews}>
-          {loadingReviews ? 'Cargando reseñas...' : showReviews ? 'Ocultar reseñas' : 'Ver reseñas'}
+          {loadingReviews ? texts.loadingReviews : showReviews ? texts.hideReviews : texts.showReviews}
         </button>
         {showReviews && reviews.length > 0 && (
           <div className="reviews-container">
-            <h3>Reseñas</h3>
+            <h3>{texts.reviews}</h3>
             <ul>
               {reviews.map(review => (
                 <li key={review.id}>
@@ -101,6 +110,7 @@ TvShowModal.propTypes = {
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   apiKey: PropTypes.string.isRequired,
+  language: PropTypes.string.isRequired,
 };
 
 export default TvShowModal;

@@ -1,12 +1,9 @@
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './LoginForm.css';
 
-import './LoginForm.css'; // Importa los estilos específicos para el formulario de inicio de sesión
-
-
-
-
-const Login = () => {
+const LoginForm = ({ onLanguageChange }) => {
   const navigate = useNavigate();
   const [requestToken, setRequestToken] = useState(null);
   const [sessionId, setSessionId] = useState(localStorage.getItem('session_id'));
@@ -49,9 +46,8 @@ const Login = () => {
         })
         .catch(error => console.error('Error:', error));
     }
-  }, [sessionId, apiKey]); // Solo se ejecutará cuando `sessionId` o `apiKey` cambien
+  }, [sessionId, apiKey]);
 
-  // Función para solicitar un token de inicio de sesión
   const getRequestToken = async () => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`);
@@ -63,7 +59,6 @@ const Login = () => {
     }
   };
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -72,11 +67,10 @@ const Login = () => {
       // Redirigir al usuario para autenticar el token
       window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=http://localhost:5173`;
     } else {
-      alert('Error al obtener el token de autenticación');
+      alert(onLanguageChange === 'es' ? 'Error al obtener el token de autenticación' : 'Error obtaining authentication token');
     }
   };
 
-  // Función para manejar el cierre de sesión
   const handleLogout = () => {
     localStorage.removeItem('session_id');
     localStorage.removeItem('username');
@@ -90,19 +84,23 @@ const Login = () => {
       {username ? (
         <div>
           <button className="user-button" onClick={() => navigate('/profile')}>
-  {username}
+            {username}
           </button>
           <button className="logout-button" onClick={handleLogout}>
-            Cerrar Sesión
+            {onLanguageChange === 'es' ? 'Cerrar Sesión' : 'Logout'}
           </button>
         </div>
       ) : (
         <button type="submit" className="login-button" onClick={handleSubmit}>
-          Iniciar Sesión
+          {onLanguageChange === 'es' ? 'Iniciar Sesión' : 'Login'}
         </button>
       )}
     </>
   );
 };
 
-export default Login;
+LoginForm.propTypes = {
+  onLanguageChange: PropTypes.string.isRequired, // El idioma actual
+};
+
+export default LoginForm;

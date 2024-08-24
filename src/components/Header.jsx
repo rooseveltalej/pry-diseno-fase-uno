@@ -11,9 +11,11 @@ const Header = ({
   onTVShowGenreChange,
   movieSearchQuery,
   tvSearchQuery,
+  onLanguageChange, // Función para manejar el cambio de idioma
 }) => {
   const [searchType, setSearchType] = useState('movies');
   const [query, setQuery] = useState('');
+  const [language, setLanguage] = useState('es'); // Estado para el idioma
 
   const handleSearchChange = (event) => {
     setQuery(event.target.value);
@@ -27,7 +29,6 @@ const Header = ({
   const handleSearchTypeChange = (event) => {
     setSearchType(event.target.value);
     setQuery('');
-    // Clear search query when switching types
     if (event.target.value === 'movies') {
       onSearch('');
     } else {
@@ -43,26 +44,35 @@ const Header = ({
     }
   };
 
+  const handleLanguageChange = (event) => {
+    setLanguage(event.target.value);
+    onLanguageChange(event.target.value); // Llama a la función para cambiar el idioma
+  };
+
   return (
     <header>
-      <h1>TECFLIX</h1>
+      <h1>{language === 'es' ? 'TECFLIX' : 'TECFLIX'}</h1>
+      <select onChange={handleLanguageChange} value={language}>
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
       <select onChange={handleSearchTypeChange} value={searchType}>
-        <option value="movies">Películas</option>
-        <option value="tvshows">Series de TV</option>
+        <option value="movies">{language === 'es' ? 'Películas' : 'Movies'}</option>
+        <option value="tvshows">{language === 'es' ? 'Series de TV' : 'TV Shows'}</option>
       </select>
       <input 
         type="text" 
-        placeholder={`Buscar ${searchType === 'movies' ? 'películas' : 'series'}...`} 
+        placeholder={language === 'es' ? `Buscar ${searchType === 'movies' ? 'películas' : 'series'}...` : `Search for ${searchType === 'movies' ? 'movies' : 'TV shows'}...`} 
         value={query}
         onChange={handleSearchChange} 
       />
       <select onChange={handleGenreChange}>
-        <option value="">Tendencias</option>
+        <option value="">{language === 'es' ? 'Tendencias' : 'Trending'}</option>
         {(searchType === 'movies' ? movieGenres : tvGenres).map((genre) => (
           <option key={genre.id} value={genre.id}>{genre.name}</option>
         ))}
       </select>
-      <LoginForm />
+      <LoginForm onLanguageChange={language} />
     </header>
   );
 };
@@ -80,8 +90,7 @@ Header.propTypes = {
   })).isRequired,
   onGenreChange: PropTypes.func.isRequired,
   onTVShowGenreChange: PropTypes.func.isRequired,
-  movieSearchQuery: PropTypes.string.isRequired,
-  tvSearchQuery: PropTypes.string.isRequired,
+  onLanguageChange: PropTypes.func.isRequired, // Se espera que sea una función
 };
 
 export default Header;

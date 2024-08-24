@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-const useSearchMovies = (apiKey) => {
+const useSearchMovies = (apiKey, language) => {
   const [movies, setMovies] = useState([]);
 
   const searchMovie = async (query = '', genreId = '') => {
     try {
-      let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=es-ES&query=${query}`;
+      let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=${language}&query=${query}`;
       
       // Si el genreId está presente, usamos la URL de descubrimiento en lugar de la búsqueda
       if (genreId) {
-        url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=es-ES&with_genres=${genreId}`;
+        url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=${language}&with_genres=${genreId}`;
       }
 
       const response = await fetch(url);
