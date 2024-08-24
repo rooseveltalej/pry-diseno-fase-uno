@@ -52,7 +52,7 @@ const UserList = ({ sessionId, apiKey }) => {
                                     <h5>{texts.show}</h5>
                                     <TVShowList 
                                         shows={tvShows} 
-                                        onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)}
+                                        onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow, language)}
                                         language={language}
                                     />
                                 </>
@@ -65,7 +65,7 @@ const UserList = ({ sessionId, apiKey }) => {
                                     <h5>{texts.movie}</h5>
                                     <MovieList 
                                         movies={movies} 
-                                        onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)}
+                                        onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow, language)}
                                         language={language}
                                     />
                                 </>
@@ -78,8 +78,8 @@ const UserList = ({ sessionId, apiKey }) => {
             ) : (
                 <p>{texts.noLists}</p>
             )}
-            {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} />}
-            {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} />}
+            {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}
+            {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
         </div>
     );
 };
