@@ -1,3 +1,4 @@
+// UserList.jsx
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TVShowList from '../TvShowList';
@@ -7,14 +8,26 @@ import TvShowModal from '../TvShowModal';
 import './css/FavoriteTvShow.css';
 import useFetchLists from '../../hooks/useFetchLists';
 import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from '../../utils/modalHandlers';
+import { useLanguage } from '../../context/LanguageContext'; // Importa el hook
 
 const UserList = ({ sessionId, apiKey }) => {
+    const { language } = useLanguage();
     const { lists, error, loading } = useFetchLists(apiKey, sessionId);
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [selectedShow, setSelectedShow] = useState(null);
 
+    // Text translations
+    const texts = {
+        personalizedLists: language === 'es' ? 'Mis Listas Personalizadas' : 'My Custom Lists',
+        noLists: language === 'es' ? 'No has creado ninguna lista personalizada.' : 'You have not created any custom lists.',
+        noTvShows: language === 'es' ? 'No hay series en esta lista.' : 'There are no TV shows in this list.',
+        noMovies: language === 'es' ? 'No hay películas en esta lista.' : 'There are no movies in this list.',
+        show: language === 'es' ? 'Series de TV' : 'TV Shows',
+        movie: language === 'es' ? 'Películas' : 'Movies',
+    };
+
     if (loading) {
-        return <p>Loading...</p>;
+        return <p>{language === 'es' ? 'Cargando...' : 'Loading...'}</p>;
     }
 
     if (error) {
@@ -23,7 +36,7 @@ const UserList = ({ sessionId, apiKey }) => {
 
     return (
         <div className="favorite-tvshows-container">
-            <h3>Mis Listas Personalizadas</h3>
+            <h3>{texts.personalizedLists}</h3>
             {lists.length > 0 ? (
                 lists.map((list) => {
                     const tvShows = list.items.filter(item => item.media_type === 'tv');
@@ -36,32 +49,34 @@ const UserList = ({ sessionId, apiKey }) => {
                             
                             {tvShows.length > 0 ? (
                                 <>
-                                    <h5>Series de TV</h5>
+                                    <h5>{texts.show}</h5>
                                     <TVShowList 
                                         shows={tvShows} 
-                                        onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+                                        onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)}
+                                        language={language}
                                     />
                                 </>
                             ) : (
-                                <p>No hay series en esta lista.</p>
+                                <p>{texts.noTvShows}</p>
                             )}
 
                             {movies.length > 0 ? (
                                 <>
-                                    <h5>Películas</h5>
+                                    <h5>{texts.movie}</h5>
                                     <MovieList 
                                         movies={movies} 
-                                        onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} 
+                                        onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)}
+                                        language={language}
                                     />
                                 </>
                             ) : (
-                                <p>No hay películas en esta lista.</p>
+                                <p>{texts.noMovies}</p>
                             )}
                         </div>
                     );
                 })
             ) : (
-                <p>No has creado ninguna lista personalizada.</p>
+                <p>{texts.noLists}</p>
             )}
             {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} />}
             {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} />}

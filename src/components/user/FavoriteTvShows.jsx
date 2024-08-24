@@ -1,11 +1,14 @@
+// FavoriteTvShows.jsx
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import TvShowList from "../TvShowList";
 import TvShowModal from '../TvShowModal';
 import './css/FavoriteTvShow.css';
 import { showTvShowDetails, closeModalShow } from '../../utils/modalHandlers';
+import { useLanguage } from '../../context/LanguageContext';
 
 const FavoriteTvShows = ({ sessionId, apiKey }) => {
+    const { language } = useLanguage();
     const [favoriteTvShows, setFavoriteTvShows] = useState([]);
     const [selectedShow, setSelectedShow] = useState(null);
 
@@ -23,18 +26,30 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
         fetchFavoriteTvShows();
     }, [apiKey, sessionId]);
 
+    // Text translations
+    const texts = {
+        favoriteShows: language === 'es' ? 'Mis Series Favoritas' : 'My Favorite TV Shows',
+        noFavorites: language === 'es' ? 'No tienes series favoritas.' : 'You have no favorite TV shows.'
+    };
+
     return (
         <div className="favorite-tv">
-            <h3>Mis Series Favoritas</h3>
-            <TvShowList 
-                shows={favoriteTvShows} 
-                onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
-            />
+            <h3>{texts.favoriteShows}</h3>
+            {favoriteTvShows.length > 0 ? (
+                <TvShowList 
+                    shows={favoriteTvShows} 
+                    onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow, language)} 
+                    language={language}
+                />
+            ) : (
+                <p>{texts.noFavorites}</p>
+            )}
             {selectedShow && (
                 <TvShowModal 
                     show={selectedShow} 
                     onClose={() => closeModalShow(setSelectedShow)} 
                     apiKey={apiKey} 
+                    language={language}
                 />
             )}
         </div>

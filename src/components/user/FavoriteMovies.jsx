@@ -1,11 +1,14 @@
+// FavoriteMovies.jsx
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import MovieList from "../MovieList";
 import MovieModal from '../MovieModal';
 import './css/FavoriteMovies.css';
 import { showMovieDetails, closeModal } from '../../utils/modalHandlers';
+import { useLanguage } from '../../context/LanguageContext';
 
 const FavoriteMovies = ({ sessionId, apiKey }) => {
+    const { language } = useLanguage();
     const [favoriteMovies, setFavoriteMovies] = useState([]);
     const [selectedMovie, setSelectedMovie] = useState(null);
 
@@ -23,18 +26,30 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
         fetchFavoriteMovies();
     }, [apiKey, sessionId]);
 
+    // Text translations
+    const texts = {
+        favoriteMovies: language === 'es' ? 'Mis Películas Favoritas' : 'My Favorite Movies',
+        noFavorites: language === 'es' ? 'No tienes películas favoritas.' : 'You have no favorite movies.'
+    };
+
     return (
         <div className="favorite-movies">
-            <h3>Mis Películas Favoritas</h3>
-            <MovieList 
-                movies={favoriteMovies} 
-                onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie)} 
-            />
+            <h3>{texts.favoriteMovies}</h3>
+            {favoriteMovies.length > 0 ? (
+                <MovieList 
+                    movies={favoriteMovies} 
+                    onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, language)} 
+                    language={language}
+                />
+            ) : (
+                <p>{texts.noFavorites}</p>
+            )}
             {selectedMovie && (
                 <MovieModal 
                     movie={selectedMovie} 
                     onClose={() => closeModal(setSelectedMovie)} 
                     apiKey={apiKey} 
+                    language={language}
                 />
             )}
         </div>

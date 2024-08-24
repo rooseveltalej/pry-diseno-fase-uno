@@ -5,9 +5,11 @@ import FavoriteMovies from './FavoriteMovies';
 import FavoriteTvShows from './FavoriteTvShows';
 import UserLists from './UserList';
 import Sidebar from './Sidebar';
+import { useLanguage } from '../../context/LanguageContext'; // Importa el hook
 import './css/UserProfile.css';
 
 const UserProfile = ({ sessionId }) => {
+    const { language } = useLanguage();
     const [userInfo, setUserInfo] = useState(null);
     const [selectedSection, setSelectedSection] = useState('lists'); // Estado para controlar la sección seleccionada
     const apiKey = "af7264be91d3f252b1abe33245f3b69f";
@@ -18,7 +20,7 @@ const UserProfile = ({ sessionId }) => {
                 const response = await fetch(`https://api.themoviedb.org/3/account?api_key=${apiKey}&session_id=${sessionId}`);
                 const data = await response.json();
                 setUserInfo(data);
-                console.log(userInfo);
+                console.log('User Info:', data); // Muestra la información del usuario actualizada
             } catch (error) {
                 console.error('Error obteniendo la información del usuario:', error);
             }
@@ -38,14 +40,20 @@ const UserProfile = ({ sessionId }) => {
         }
     };
 
+    // Traducciones basadas en el idioma actual
+    const texts = {
+        welcome: language === 'es' ? 'Bienvenido' : 'Welcome',
+        country: language === 'es' ? 'País' : 'Country',
+    };
+
     return (
         <div className="user-profile-container">
             <Sidebar onSelectSection={setSelectedSection} />
             <div className="user-content">
                 {userInfo && (
                     <div className="user-info">
-                        <h2 className="user-name">Bienvenido {userInfo.name || userInfo.username}</h2>
-                        <p className="user-country">País: {userInfo.iso_3166_1 || 'No disponible'}</p>
+                        <h2 className="user-name">{texts.welcome} {userInfo.name || userInfo.username}</h2>
+                        <p className="user-country">{texts.country}: {userInfo.iso_3166_1 || 'No disponible'}</p>
                     </div>
                 )}
                 <div className="user-section-content">

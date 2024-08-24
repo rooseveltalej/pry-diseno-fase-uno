@@ -14,9 +14,10 @@ import './Responsive.css';
 import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from './utils/modalHandlers';
 import { goBackToTrending } from './utils/navigationHandlers';
 import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
+import { useLanguage } from './context/LanguageContext'; // Importa el hook
 
 const App = () => {
-  const [language, setLanguage] = useState('es');
+  const { language, setLanguage } = useLanguage();
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
   const { trendingMovies } = useFetchTrendingMovies(apiKey, language);
   const { trendingTVShows } = useFetchTrendingTVShows(apiKey, language);
