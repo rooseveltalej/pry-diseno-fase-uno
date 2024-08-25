@@ -52,7 +52,6 @@ const Header = ({
   };
 
   const handleLanguageChange = (event) => {
-    setQuery('');
     setLanguage(event.target.value);
     onLanguageChange(event.target.value);
   };
@@ -71,7 +70,7 @@ const Header = ({
     <header className="header">
       <div className="header-left">
         <button className="header-button" onClick={handleReset}>
-          {(isSearching || isGenreSelected) ? (language === 'es' ? 'Volver al inicio' : 'Back to start') : (language === 'es' ? 'Inicio' : 'Start')}
+          {( (isSearching && isLanguageSelected) || isSearching || isGenreSelected) ? (language === 'es' ? 'Volver al inicio' : 'Back to start') : (language === 'es' ? 'Inicio' : 'Start')}
         </button>
       </div>
       <div className="header-center">
