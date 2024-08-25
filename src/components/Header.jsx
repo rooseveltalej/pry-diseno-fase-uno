@@ -53,8 +53,9 @@ const Header = ({
     <header>
       <h1>{language === 'es' ? 'TECFLIX' : 'TECFLIX'}</h1>
       <select onChange={handleLanguageChange} value={language}>
-        <option value="es">Español</option>
-        <option value="en">English</option>
+        l
+        <option value="es">{language === 'es' ? 'Español' : 'Spanish'}</option>
+        <option value="en">{language === 'en' ? 'English' : 'Inglés'}</option>
       </select>
       <select onChange={handleSearchTypeChange} value={searchType}>
         <option value="movies">{language === 'es' ? 'Películas' : 'Movies'}</option>
