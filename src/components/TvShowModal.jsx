@@ -1,25 +1,28 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const TvShowModal = ({ show, onClose, apiKey, language }) => {
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
+  const [tvShowDetails, setTvShowDetails] = useState(show); // Agregar estado para detalles de la película
+
+  useEffect(() => {
+    if (showReviews) {
+      fetchReviews();
+    }
+  }, [showReviews, language, show.id]);
+
+  useEffect(() => {
+    fetchTvShowDetails(); // Fetch movie details when language changes
+  }, [language, show.id]);
 
   const fetchReviews = async () => {
     setLoadingReviews(true);
     try {
-      let response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=${language}`);
-      let data = await response.json();
-  
-      // Si no hay reseñas en el idioma seleccionado, buscar en inglés
-      if (!data.results || data.results.length === 0) {
-        response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=en-US`);
-        data = await response.json();
-      }
-  
-      setReviews(data.results);
-      setShowReviews(true);
+      const response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}/reviews?api_key=${apiKey}&language=${language}`);
+      const data = await response.json();
+      setReviews(data.results || []);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     } finally {
@@ -28,16 +31,19 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
   };
 
   const toggleReviews = () => {
-    if (showReviews) {
-      setShowReviews(false);
-    } else {
-      if (reviews.length === 0) {
-        fetchReviews();
-      } else {
-        setShowReviews(true);
-      }
+    setShowReviews(!showReviews);
+  };
+
+  const fetchTvShowDetails = async () => {
+    try {
+      const response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiKey}&language=${language}`);
+      const data = await response.json();
+      setTvShowDetails(data); // Actualiza los detalles de la película
+    } catch (error) {
+      console.error('Error fetching movie details:', error);
     }
   };
+
 
   const actors = show.credits.cast.slice(0, 5).map((actor) => (
     language === 'es' ? <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li> :
@@ -60,8 +66,8 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
     <div className="modal" style={{ display: 'flex' }}>
       <div className="modal-content">
         <span className="close-btn" onClick={onClose}>&times;</span>
-        <h2>{show.name}</h2>
-        <p>{show.overview}</p>
+        <h2>{tvShowDetails.title}</h2>
+        <p>{tvShowDetails.overview}</p>
         <h3>{texts.actors}</h3>
         <ul className="actor-list">{actors}</ul>
         {videoUrl && (
