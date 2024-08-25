@@ -5,6 +5,7 @@ import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
 import TVShowList from './components/TvShowList';
 import TvShowModal from './components/TvShowModal';
+import { useLanguage } from './context/LanguageContext'; // Importa el hook
 import useFetchGenres from './hooks/useFetchGenres';
 import useFetchTrendingMovies from './hooks/useFetchTrendingMovies';
 import useFetchTrendingTVShows from './hooks/useFetchTrendingTVShows';
@@ -12,9 +13,7 @@ import useSearchMovies from './hooks/useSearchMovies';
 import useSearchTVShows from './hooks/useSearchTVShows';
 import './Responsive.css';
 import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from './utils/modalHandlers';
-import { goBackToTrending } from './utils/navigationHandlers';
 import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
-import { useLanguage } from './context/LanguageContext'; // Importa el hook
 
 const App = () => {
   const { language, setLanguage } = useLanguage();
@@ -29,6 +28,7 @@ const App = () => {
   const [selectedShow, setSelectedShow] = useState(null);
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [query, setQuery] = useState(''); // Estado para la consulta de búsqueda
 
   // Text translations
   const texts = {
@@ -48,6 +48,7 @@ const App = () => {
         onGenreChange={(genre) => {
           if (!genre) {
             setShowSearchResults(false);
+  
             return;
           }
           searchMovie('', genre);
@@ -57,6 +58,7 @@ const App = () => {
         onTVShowGenreChange={(genre) => {
           if (!genre) {
             setShowSearchResults(false);
+ 
             return;
           }
           searchTVShows('', genre);
@@ -65,30 +67,25 @@ const App = () => {
         }} 
         onLanguageChange={(newLanguage) => setLanguage(newLanguage)} // Cambia el idioma
       />
-{showSearchResults ? (
-  <>
-    <h2>{texts.searchResults}</h2>
-    <div className="button-container">
-      <button className="back-to-trending-button" onClick={() => goBackToTrending(setShowSearchResults, setSearchType)}>
-        {texts.backToTrending}
-      </button>
-    </div>
-    {searchType === 'movie' ? (
-      <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
-    ) : (
-      <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
-    )}
-  </>
-) : (
-  <>
-    <h2>{texts.trendingMovies}</h2>
-    <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
-    <h2>{texts.trendingTVShows}</h2>
-    <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
-  </>
-)}
-{selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}
-{selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
+      {showSearchResults ? (
+        <>
+          <h2>{texts.searchResults}</h2>
+          {searchType === 'movie' ? (
+            <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+          ) : (
+            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+          )}
+        </>
+      ) : (
+        <>
+          <h2>{texts.trendingMovies}</h2>
+          <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+          <h2>{texts.trendingTVShows}</h2>
+          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+        </>
+      )}
+      {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}
+      {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
     </div>
   );
 }
