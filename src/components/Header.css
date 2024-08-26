@@ -51,7 +51,7 @@
   font-size: 1rem;
   background-color: #444;
   color: #fff;
-  min-width: 120px; /* Asegura que todos los selectores tengan un ancho mínimo */
+  min-width: 150x; /* Asegura que todos los selectores tengan un ancho mínimo */
 }
 
 .header-select {
@@ -73,6 +73,7 @@
   align-self: center;
   max-width: 300px;
   text-align: center;
+  min-width: 100px; /* Asegura que todos los botones tengan un ancho mínimo */
 }
 
 .header-button:hover {
