@@ -1,80 +1,80 @@
 .header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-  }
-  
-  .header-left {
-    flex: 1;
-    display: flex;
-    align-items: center;
-  }
-  
-  .header-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .header-center {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-  
-  .header-title {
-    font-size: 2rem;
-    text-align: center;
-    margin: 0;
-    margin-bottom: 0.5rem; /* Espacio adicional debajo del título */
-    position: absolute;
-    top: 0.0rem; /* Ajustar la posición hacia arriba */
-  }
-  
-  .header-controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
-    margin-top: 3rem; /* Espacio adicional para los controles debajo del título */
-  }
-  
-  .header-select, .header-input, .header-button {
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #666;
-    font-size: 1rem;
-    background-color: #444;
-    color: #fff;
-  }
-  
-  .header-select {
-    background-color: #555;
-  }
-  
-  .header-input {
-    flex: 1;
-    max-width: 300px;
-    background-color: #555;
-  }
-  
-  .header-button {
-    background-color: #21a1f1;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem; /* Ajustado para que sea igual al resto de los controles */
-    padding: 0.5rem 1rem; /* Mayor tamaño del botón */
-  }
-  
-  .header-button:hover {
-    background-color: #2152f1;
-  }
-  
+  position: sticky;
+  top: 0;
+  background-color: #333;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.header-center {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.header-title {
+  font-size: 2rem;
+  text-align: center;
+  margin: 0;
+  margin-bottom: 0.5rem; /* Espacio adicional debajo del título */
+  position: absolute;
+  top: -0.7rem; /* Ajustar la posición hacia arriba */
+  left: 3%;
+}
+
+.header-controls {
+  display: flex;
+  gap: 0.5rem; /* Reducido el gap para ajustar los elementos en una línea */
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem; /* Ajusta este valor si es necesario para el espaciado */
+  flex-wrap: nowrap; /* Evita que los elementos se muevan a la siguiente línea */
+}
+
+.header-select, .header-input, .header-button {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #666;
+  font-size: 1rem;
+  background-color: #444;
+  color: #fff;
+  min-width: 120px; /* Asegura que todos los selectores tengan un ancho mínimo */
+}
+
+.header-select {
+  background-color: #555;
+}
+
+.header-input {
+  flex: 1;
+  max-width: 400px;
+  background-color: #555;
+}
+
+.header-button {
+  background-color: #21a1f1;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  align-self: center;
+  max-width: 300px;
+  text-align: center;
+}
+
+.header-button:hover {
+  background-color: #2152f1;
+}

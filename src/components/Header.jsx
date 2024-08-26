@@ -68,14 +68,12 @@ const Header = ({
 
   return (
     <header className="header">
-      <div className="header-left">
-        <button className="header-button" onClick={handleReset}>
-          {( (isSearching && isLanguageSelected) || isSearching || isGenreSelected) ? (language === 'es' ? 'Volver al inicio' : 'Back to start') : (language === 'es' ? 'Inicio' : 'Start')}
-        </button>
-      </div>
       <div className="header-center">
         <h1 className="header-title">{language === 'es' ? 'TECFLIX' : 'TECFLIX'}</h1>
         <div className="header-controls">
+        <button className="header-button" onClick={handleReset}>
+          {( (isSearching && isLanguageSelected) || isSearching || isGenreSelected) ? (language === 'es' ? 'Volver al inicio' : 'Back to start') : (language === 'es' ? 'Inicio' : 'Start')}
+        </button>
           <select className="header-select" onChange={handleLanguageChange} value={language}>
             <option value="es">{language === 'es' ? 'Español' : 'Spanish'}</option>
             <option value="en">{language === 'en' ? 'English' : 'Inglés'}</option>
