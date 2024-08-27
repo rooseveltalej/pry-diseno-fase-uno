@@ -73,7 +73,7 @@
   align-self: center;
   max-width: 300px;
   text-align: center;
-  min-width: 100px; /* Asegura que todos los botones tengan un ancho mínimo */
+  min-width: 150px; /* Asegura que todos los botones tengan un ancho mínimo */
 }
 
 .header-button:hover {

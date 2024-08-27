@@ -28,7 +28,6 @@ const App = () => {
   const [selectedShow, setSelectedShow] = useState(null);
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [query, setQuery] = useState(''); // Estado para la consulta de búsqueda
 
   // Text translations
   const texts = {
