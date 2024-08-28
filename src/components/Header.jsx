@@ -11,7 +11,6 @@ const Header = ({
   onGenreChange,
   onTVShowGenreChange,
   onLanguageChange,
-  onSearchActors,
 }) => {
   const [searchType, setSearchType] = useState('movies');
   const [query, setQuery] = useState('');
@@ -26,13 +25,11 @@ const Header = ({
     setQuery(event.target.value);
     if (searchType === 'movies') {
       onSearch(event.target.value);
-    } else {
+    } else  {
       onSearchTVShows(event.target.value);
-    }
+    } 
   };
 
-
-    
 
   const handleSearchTypeChange = (event) => {
     setSearchType(event.target.value);
@@ -42,7 +39,7 @@ const Header = ({
       onSearch('');
     } else {
       onSearchTVShows('');
-    }
+    } 
   };
 
   const handleGenreChange = (event) => {
@@ -67,7 +64,7 @@ const Header = ({
       onSearch('');
     } else {
       onSearchTVShows('');
-    }
+    } 
   };
 
 
@@ -87,14 +84,17 @@ const Header = ({
           <select className="header-select" onChange={handleSearchTypeChange} value={searchType}>
             <option value="movies">{language === 'es' ? 'Películas' : 'Movies'}</option>
             <option value="tvshows">{language === 'es' ? 'Series de TV' : 'TV Shows'}</option>
+            
           </select>
           <input 
-            className="header-input"
-            type="text" 
-            placeholder={language === 'es' ? `Buscar ${searchType === 'movies' ? 'películas' : 'series'}...` : `Search for ${searchType === 'movies' ? 'movies' : 'TV shows'}...`} 
-            value={query}
-            onChange={handleSearchChange} 
-          />
+                className="header-input"
+                type="text" 
+                placeholder={language === 'es' 
+                  ? `Buscar ${searchType === 'movies' ? 'películas' : 'series'}...` 
+                  : `Search for ${searchType === 'movies' ? 'movies' : 'TV shows'}...`} 
+                value={query}
+                onChange={handleSearchChange} 
+              />
           <select className="header-select" onChange={handleGenreChange} value={selectedGenre}>
             <option value="">{language === 'es' ? 'Tendencias' : 'Trending'}</option>
             {(searchType === 'movies' ? movieGenres : tvGenres).map((genre) => (

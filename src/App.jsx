@@ -9,7 +9,6 @@ import { useLanguage } from './context/LanguageContext'; // Importa el hook
 import useFetchGenres from './hooks/useFetchGenres';
 import useFetchTrendingMovies from './hooks/useFetchTrendingMovies';
 import useFetchTrendingTVShows from './hooks/useFetchTrendingTVShows';
-import useSearchActores from './hooks/useSearchActors';
 import useSearchMovies from './hooks/useSearchMovies';
 import useSearchTVShows from './hooks/useSearchTVShows';
 import './Responsive.css';
@@ -24,7 +23,6 @@ const App = () => {
   const { movieGenres, tvGenres } = useFetchGenres(apiKey, language);
   const { movies, searchMovie } = useSearchMovies(apiKey, language);
   const { shows, searchTVShows } = useSearchTVShows(apiKey, language);
-  const { actors, searchActors } = useSearchActores(apiKey, language);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
@@ -91,4 +89,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default App
