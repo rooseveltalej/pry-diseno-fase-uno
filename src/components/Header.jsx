@@ -11,6 +11,7 @@ const Header = ({
   onGenreChange,
   onTVShowGenreChange,
   onLanguageChange,
+  onSearchActors,
 }) => {
   const [searchType, setSearchType] = useState('movies');
   const [query, setQuery] = useState('');
@@ -29,6 +30,9 @@ const Header = ({
       onSearchTVShows(event.target.value);
     }
   };
+
+
+    
 
   const handleSearchTypeChange = (event) => {
     setSearchType(event.target.value);
@@ -65,6 +69,8 @@ const Header = ({
       onSearchTVShows('');
     }
   };
+
+
 
   return (
     <header className="header">
