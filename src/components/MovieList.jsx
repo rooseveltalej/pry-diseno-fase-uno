@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import MovieCard from './MovieCard';
 
 const MovieList = ({ movies, onMovieClick, language }) => {
+  console.log('Movies Prop:', movies);
   return (
     <main>
       {movies.map((movie) => (

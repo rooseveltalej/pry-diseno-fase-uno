@@ -20,6 +20,7 @@ const useSearchMovies = (apiKey, language) => {
     }
   };
 
+  console.log('Movies:', movies);
   return { movies, searchMovie };
 };
 

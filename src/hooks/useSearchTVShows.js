@@ -3,26 +3,24 @@ import { useState } from 'react';
 const useSearchTVShows = (apiKey, language) => {
   const [shows, setShows] = useState([]);
 
-  const searchTVShows = async (query, genre = '', actor = '') => {
+  const searchTVShows = async (query = '', genreId = '') => {
     try {
       let url = `https://api.themoviedb.org/3/search/tv?api_key=${apiKey}&language=${language}&query=${query}`;
-      if (genre) url += `&with_genres=${genre}`;
-      if (actor) {
-        const actorResponse = await fetch(`https://api.themoviedb.org/3/search/person?api_key=${apiKey}&language=${language}&query=${actor}`);
-        const actorData = await actorResponse.json();
-        const actorId = actorData.results[0]?.id;
-        if (actorId) {
-          url += `&with_cast=${actorId}`;
-        }
+      
+      // Si el genreId está presente, usamos la URL de descubrimiento en lugar de la búsqueda
+      if (genreId) {
+        url = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=${language}&with_genres=${genreId}`;
       }
+
       const response = await fetch(url);
       const data = await response.json();
-      setShows(data.results);
+      setShows(data.results || []);
     } catch (error) {
-      console.error('Error fetching TV shows:', error);
+      console.error('Error searching TV shows:', error);
     }
   };
 
+  console.log('TV Shows:', shows);
   return { shows, searchTVShows };
 };
 

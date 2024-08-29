@@ -5,29 +5,34 @@ import MovieList from './components/MovieList';
 import MovieModal from './components/MovieModal';
 import TVShowList from './components/TvShowList';
 import TvShowModal from './components/TvShowModal';
-import { useLanguage } from './context/LanguageContext'; // Importa el hook
+import { useLanguage } from './context/LanguageContext';
 import useFetchGenres from './hooks/useFetchGenres';
 import useFetchTrendingMovies from './hooks/useFetchTrendingMovies';
 import useFetchTrendingTVShows from './hooks/useFetchTrendingTVShows';
+import useSearchByActor from './hooks/useSearchByActor';
 import useSearchMovies from './hooks/useSearchMovies';
 import useSearchTVShows from './hooks/useSearchTVShows';
 import './Responsive.css';
 import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from './utils/modalHandlers';
-import { handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
+import { handleActorSearch, handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
 
 const App = () => {
   const { language, setLanguage } = useLanguage();
   const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
   const { trendingMovies } = useFetchTrendingMovies(apiKey, language);
   const { trendingTVShows } = useFetchTrendingTVShows(apiKey, language);
-  const { movieGenres, tvGenres } = useFetchGenres(apiKey, language);
+  const { movieGenres = [], tvGenres = [], actorGenres = [] } = useFetchGenres(apiKey, language, 'person');
   const { movies, searchMovie } = useSearchMovies(apiKey, language);
   const { shows, searchTVShows } = useSearchTVShows(apiKey, language);
+  const { actorMovies,searchMoviesByActor, actorTvShows,searchTVShowsByActor, getActorId } = useSearchByActor(apiKey, language);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
+
+
+  
 
   // Text translations
   const texts = {
@@ -42,12 +47,13 @@ const App = () => {
       <Header 
         onSearch={(query) => handleMovieSearchChange(query, searchMovie, setSearchType, setShowSearchResults)} 
         onSearchTVShows={(query) => handleTVSearchChange(query, searchTVShows, setSearchType, setShowSearchResults)} 
+        onSearchByActor={(query) => handleActorSearch(query,getActorId,searchMoviesByActor, searchTVShowsByActor, setSearchType, setShowSearchResults)}
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
+        actorGenres={actorGenres}
         onGenreChange={(genre) => {
           if (!genre) {
             setShowSearchResults(false);
-  
             return;
           }
           searchMovie('', genre);
@@ -57,23 +63,38 @@ const App = () => {
         onTVShowGenreChange={(genre) => {
           if (!genre) {
             setShowSearchResults(false);
- 
             return;
           }
           searchTVShows('', genre);
           setSearchType('tv');
           setShowSearchResults(true);
         }} 
-        onLanguageChange={(newLanguage) => setLanguage(newLanguage)} // Cambia el idioma
+        onActorGenreChange={(genre) => {
+          if (!genre) {
+            setShowSearchResults(false);
+            return;
+          }
+          searchMoviesByActor('', genre);
+          searchTVShowsByActor('', genre);
+          setSearchType('actor');
+          setShowSearchResults(true);
+        }} 
+        onLanguageChange={(newLanguage) => setLanguage(newLanguage)} 
       />
       {showSearchResults ? (
         <>
           <h2>{texts.searchResults}</h2>
-          {searchType === 'movie' ? (
+          {searchType === 'movie' && (
             <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
-          ) : (
-            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
           )}
+          {searchType === 'tv' && (
+            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />)}
+          {searchType === 'actor' && (
+              <>
+                <MovieList movies={actorMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+                <TVShowList shows={actorTvShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+              </>
+            )}
         </>
       ) : (
         <>
@@ -87,6 +108,6 @@ const App = () => {
       {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
     </div>
   );
-}
+};
 
-export default App
+export default App;

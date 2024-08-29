@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import TVShowCard from './TvShowCard';
 
 const TVShowList = ({ shows, onShowClick, language }) => {
+  console.log('shows Prop:', shows);
   return (
     <main>
       {shows.map((show) => (
