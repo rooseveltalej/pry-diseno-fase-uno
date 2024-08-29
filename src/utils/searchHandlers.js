@@ -17,4 +17,5 @@ export const handleMovieSearchChange = (query, searchMovie, setSearchType, setSh
     setSearchType('tv');
     setShowSearchResults(true);
   };
+
   

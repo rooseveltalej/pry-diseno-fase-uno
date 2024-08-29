@@ -29,19 +29,19 @@
   font-size: 2rem;
   text-align: center;
   margin: 0;
-  margin-bottom: 0.5rem; /* Espacio adicional debajo del título */
+  margin-bottom: 0.5rem;
   position: absolute;
-  top: -0.7rem; /* Ajustar la posición hacia arriba */
+  top: -0.7rem;
   left: 3%;
 }
 
 .header-controls {
   display: flex;
-  gap: 0.5rem; /* Reducido el gap para ajustar los elementos en una línea */
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem; /* Ajusta este valor si es necesario para el espaciado */
-  flex-wrap: nowrap; /* Evita que los elementos se muevan a la siguiente línea */
+  margin-top: 2rem;
+  flex-wrap: nowrap;
 }
 
 .header-select, .header-input, .header-button {
@@ -51,7 +51,11 @@
   font-size: 1rem;
   background-color: #444;
   color: #fff;
-  min-width: 150x; /* Asegura que todos los selectores tengan un ancho mínimo */
+  width: 150px; /* Ancho fijo */
+  height: 40px; /* Altura fija */
+  overflow: hidden; /* Oculta contenido que excede el tamaño del elemento */
+  text-overflow: ellipsis; /* Muestra "..." si el texto es demasiado largo */
+  white-space: nowrap; /* Evita que el texto se ajuste en múltiples líneas */
 }
 
 .header-select {
@@ -60,8 +64,8 @@
 
 .header-input {
   flex: 1;
-  max-width: 400px;
   background-color: #555;
+  width: 170px;
 }
 
 .header-button {
@@ -73,7 +77,6 @@
   align-self: center;
   max-width: 300px;
   text-align: center;
-  min-width: 150px; /* Asegura que todos los botones tengan un ancho mínimo */
 }
 
 .header-button:hover {
