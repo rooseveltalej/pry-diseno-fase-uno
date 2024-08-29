@@ -5,7 +5,7 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
-  const [tvShowDetails, setTvShowDetails] = useState(show); // Agregar estado para detalles de la película
+  const [tvShowDetails, setTvShowDetails] = useState(show); // Agregar estado para detalles de la serie
 
   useEffect(() => {
     if (showReviews) {
@@ -14,7 +14,7 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
   }, [showReviews, language, show.id]);
 
   useEffect(() => {
-    fetchTvShowDetails(); // Fetch movie details when language changes
+    fetchTvShowDetails(); // Fetch TV show details when language changes
   }, [language, show.id]);
 
   const fetchReviews = async () => {
@@ -38,16 +38,34 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
     try {
       const response = await fetch(`https://api.themoviedb.org/3/tv/${show.id}?api_key=${apiKey}&language=${language}`);
       const data = await response.json();
-      setTvShowDetails(data); // Actualiza los detalles de la película
+      setTvShowDetails(data); // Actualiza los detalles de la serie
     } catch (error) {
-      console.error('Error fetching movie details:', error);
+      console.error('Error fetching TV show details:', error);
     }
   };
 
-
   const actors = show.credits.cast.slice(0, 5).map((actor) => (
-    language === 'es' ? <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li> :
-    <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> as {actor.character}</li>
+    language === 'es' ? 
+    <li key={actor.cast_id}>
+      <a 
+        href={`https://www.themoviedb.org/person/${actor.id}?language=${language}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="actor-link"
+      >
+        {actor.name}
+      </a> como {actor.character}
+    </li> :
+    <li key={actor.cast_id}>
+      <a 
+        href={`https://www.themoviedb.org/person/${actor.id}?language=${language}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="actor-link"
+      >
+        {actor.name}
+      </a> as {actor.character}
+    </li>
   ));
 
   const video = show.videos.results.find((vid) => vid.type === 'Trailer');
@@ -66,7 +84,7 @@ const TvShowModal = ({ show, onClose, apiKey, language }) => {
     <div className="modal" style={{ display: 'flex' }}>
       <div className="modal-content">
         <span className="close-btn" onClick={onClose}>&times;</span>
-        <h2>{tvShowDetails.title}</h2>
+        <h2>{tvShowDetails.name}</h2>
         <p>{tvShowDetails.overview}</p>
         <h3>{texts.actors}</h3>
         <ul className="actor-list">{actors}</ul>
@@ -105,6 +123,7 @@ TvShowModal.propTypes = {
         cast_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         character: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
       })).isRequired,
     }).isRequired,
     videos: PropTypes.shape({

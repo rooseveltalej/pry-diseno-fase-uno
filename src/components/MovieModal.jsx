@@ -45,8 +45,27 @@ const MovieModal = ({ movie, onClose, apiKey, language }) => {
   };
 
   const actors = movie.credits.cast.slice(0, 5).map((actor) => (
-    language === 'es' ? <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> como {actor.character}</li> :
-    <li key={actor.cast_id}><span className="actor-name">{actor.name}</span> as {actor.character}</li>
+    language === 'es' ? 
+    <li key={actor.cast_id}>
+      <a 
+        href={`https://www.themoviedb.org/person/${actor.id}?language=${language}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="actor-link"
+      >
+        {actor.name}
+      </a> como {actor.character}
+    </li> :
+    <li key={actor.cast_id}>
+      <a 
+        href={`https://www.themoviedb.org/person/${actor.id}?language=${language}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="actor-link"
+      >
+        {actor.name}
+      </a> as {actor.character}
+    </li>
   ));
 
   const video = movie.videos.results.find((vid) => vid.type === 'Trailer');
@@ -59,7 +78,6 @@ const MovieModal = ({ movie, onClose, apiKey, language }) => {
     loadingReviews: language === 'es' ? 'Cargando reseñas...' : 'Loading reviews...',
     showReviews: language === 'es' ? 'Ver reseñas' : 'Show reviews',
     hideReviews: language === 'es' ? 'Ocultar reseñas' : 'Hide reviews',
-
   };
 
   return (
@@ -105,6 +123,7 @@ MovieModal.propTypes = {
         cast_id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
         character: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired, // Agregar ID aquí
       })).isRequired,
     }).isRequired,
     videos: PropTypes.shape({
