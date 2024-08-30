@@ -31,6 +31,6 @@
     background-color: #d31414; /* Un color azul para indicar el botón activo */
 }
 
-.sidebar button:focus {
+.sidebar button:focus, .sidebar button.active {
     background-color: #1487d3; /* Un color azul para indicar el botón activo */
 }

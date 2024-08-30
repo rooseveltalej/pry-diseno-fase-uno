@@ -9,6 +9,9 @@ import App from './App';
 import UserProfile from './components/user/UserProfile'; // Importa el componente
 import { LanguageProvider } from './context/LanguageContext'; // Importa el contexto
 
+
+
+
 const sessionId = localStorage.getItem('session_id'); // Obtén el session_id desde el almacenamiento local
 
 ReactDOM.createRoot(document.getElementById('root')).render(

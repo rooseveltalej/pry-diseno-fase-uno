@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import { useLanguage } from '../../context/LanguageContext'; // Importa el hook
 import './css/UserProfile.css';
 
+
 const UserProfile = ({ sessionId }) => {
     const { language } = useLanguage();
     const [userInfo, setUserInfo] = useState(null);
