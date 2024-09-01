@@ -41,6 +41,10 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
 
             if (!response.ok) throw new Error('Error removing from favorites');
 
+            if (response.ok) {
+                alert('Elemento eliminado de favoritos.');
+            }
+
             // Update state
             setFavoriteMovies(favoriteMovies.filter(movie => movie.id !== movieId));
         } catch (error) {
