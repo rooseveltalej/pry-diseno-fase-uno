@@ -67,6 +67,7 @@ const UserList = ({ sessionId, apiKey }) => {
                                         movies={movies} 
                                         onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow, language)}
                                         language={language}
+                                        buttonType='remove'
                                     />
                                 </>
                             ) : (
