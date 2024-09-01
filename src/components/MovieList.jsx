@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import MovieCard from './MovieCard';
 
-const MovieList = ({ movies, onMovieClick, language, buttonType, onButtonClick }) => {
-  console.log('movies Prop:', movies);
-  
+const MovieList = ({ movies, onMovieClick, language, buttonType, onFavoriteClick }) => {
   return (
     <main>
       {movies.map((movie) => (
@@ -12,8 +10,8 @@ const MovieList = ({ movies, onMovieClick, language, buttonType, onButtonClick }
           movie={movie} 
           onClick={() => onMovieClick(movie.id)} 
           language={language}
-          buttonType={buttonType}  // Pasar el prop de agregar o eliminar
-          onButtonClick={() => onButtonClick(movie.id)}  // Manejar el clic en el botón
+          buttonType={buttonType}  // Pasar el tipo de botón
+          onFavoriteClick={() => onFavoriteClick(movie.id)} 
         />
       ))}
     </main>
@@ -30,8 +28,8 @@ MovieList.propTypes = {
   })).isRequired,
   onMovieClick: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
-  buttonType: PropTypes.oneOf(['add', 'remove']).isRequired,
-  onButtonClick: PropTypes.func.isRequired,
+  buttonType: PropTypes.oneOf(['add', 'remove']).isRequired, // Añadido para distinguir el tipo de botón
+  onFavoriteClick: PropTypes.func.isRequired,
 };
 
 export default MovieList;

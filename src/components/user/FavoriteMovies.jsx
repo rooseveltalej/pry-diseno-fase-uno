@@ -18,33 +18,34 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
                 const data = await response.json();
                 setFavoriteMovies(data.results);
             } catch (error) {
-                console.error('Error obteniendo la lista de películas favoritas:', error);
+                console.error('Error fetching favorite movies:', error);
             }
         };
 
         fetchFavoriteMovies();
     }, [apiKey, sessionId]);
 
-    const removeFromFavorites = (movieId) => {
-        fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                media_type: 'movie',
-                media_id: movieId,
-                favorite: false,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Removed from favorites:', data);
-            setFavoriteMovies(prev => prev.filter(movie => movie.id !== movieId));
-        })
-        .catch(error => {
-            console.error('Error removing from favorites:', error);
-        });
+    const handleRemoveFromFavorites = async (movieId) => {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    media_type: 'movie',
+                    media_id: movieId,
+                    favorite: false
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error('Error removing from favorites');
+
+            // Update state
+            setFavoriteMovies(favoriteMovies.filter(movie => movie.id !== movieId));
+        } catch (error) {
+            console.error('Error removing movie from favorites:', error);
+        }
     };
 
     // Text translations
@@ -61,8 +62,8 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
                     movies={favoriteMovies} 
                     onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, language)} 
                     language={language}
-                    buttonType='remove'
-                    onButtonClick={removeFromFavorites}
+                    buttonType='remove'  // Establece el tipo de botón para eliminar
+                    onFavoriteClick={handleRemoveFromFavorites}  // Maneja el clic en el botón de eliminar
                 />
             ) : (
                 <p>{texts.noFavorites}</p>
