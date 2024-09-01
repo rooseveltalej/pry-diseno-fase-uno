@@ -6,7 +6,7 @@ const MovieCard = ({ movie, onClick, language, buttonType, onButtonClick }) => {
   // Text translations
   const texts = {
     rating: language === 'es' ? 'Calificación' : 'Rating',
-    releaseDate: language === 'es' ? 'Fecha de lanzamiento' : 'Release Date',
+    releaseDate: language === 'es' ? 'Fecha de Estreno' : 'Release Date',
     more: language === 'es' ? 'Ver más' : 'See More',
     addToList: language === 'es' ? 'Guardar en lista' : 'Add to List',
     removeFromList: language === 'es' ? 'Eliminar de lista' : 'Remove from List',

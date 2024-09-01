@@ -25,15 +25,12 @@ const App = () => {
   const { movieGenres = [], tvGenres = [], actorGenres = [] } = useFetchGenres(apiKey, language, 'person');
   const { movies, searchMovie } = useSearchMovies(apiKey, language);
   const { shows, searchTVShows } = useSearchTVShows(apiKey, language);
-  const { actorMovies,searchMoviesByActor, actorTvShows,searchTVShowsByActor, getActorId } = useSearchByActor(apiKey, language);
+  const { actorMovies, searchMoviesByActor, actorTvShows, searchTVShowsByActor, getActorId } = useSearchByActor(apiKey, language);
 
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedShow, setSelectedShow] = useState(null);
   const [searchType, setSearchType] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
-
-
-  
 
   // Text translations
   const texts = {
@@ -43,12 +40,45 @@ const App = () => {
     backToTrending: language === 'es' ? 'Volver a Tendencias' : 'Back to Trending',
   };
 
+  // Function to handle adding to favorites
+  const handleAddToFavorites = async (mediaId, mediaType) => {
+    try {
+      const sessionId = localStorage.getItem('session_id'); // Usa la sesión autenticada
+      const endpoint = mediaType === 'movie'
+        ? `https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`
+        : `https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`;
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          media_type: mediaType,
+          media_id: mediaId,
+          favorite: true
+        }),
+      });
+
+      if (response.ok) {
+        alert('Elemento agregado a favoritos.');
+      } else {
+        const errorData = await response.json();
+        console.error('Error al agregar a favoritos:', errorData);
+        alert('Error al agregar a favoritos.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Ocurrió un error al agregar a favoritos.');
+    }
+  };
+
   return (
     <div className="app-container">
       <Header 
         onSearch={(query) => handleMovieSearchChange(query, searchMovie, setSearchType, setShowSearchResults)} 
         onSearchTVShows={(query) => handleTVSearchChange(query, searchTVShows, setSearchType, setShowSearchResults)} 
-        onSearchByActor={(query) => handleActorSearch(query,getActorId,searchMoviesByActor, searchTVShowsByActor, setSearchType, setShowSearchResults)}
+        onSearchByActor={(query) => handleActorSearch(query, getActorId, searchMoviesByActor, searchTVShowsByActor, setSearchType, setShowSearchResults)}
         movieGenres={movieGenres} 
         tvGenres={tvGenres} 
         actorGenres={actorGenres}
@@ -86,23 +116,60 @@ const App = () => {
         <>
           <h2>{texts.searchResults}</h2>
           {searchType === 'movie' && (
-            <MovieList movies={movies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
+            <MovieList 
+              movies={movies} 
+              onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} 
+              language={language} 
+              buttonType='add'
+              onFavoriteClick={(movieId) => handleAddToFavorites(movieId, 'movie')} 
+            />
           )}
           {searchType === 'tv' && (
-            <TVShowList shows={shows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />)}
+            <TVShowList 
+              shows={shows} 
+              onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+              language={language} 
+              buttonType='add'
+              onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+            />
+          )}
           {searchType === 'actor' && (
-              <>
-                <MovieList movies={actorMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} />
-                <TVShowList shows={actorTvShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
-              </>
-            )}
+            <>
+              <MovieList 
+                movies={actorMovies} 
+                onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} 
+                language={language} 
+                buttonType='add'
+                onFavoriteClick={(movieId) => handleAddToFavorites(movieId, 'movie')} 
+              />
+              <TVShowList 
+                shows={actorTvShows} 
+                onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+                language={language} 
+                buttonType='add'
+                onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+              />
+            </>
+          )}
         </>
       ) : (
         <>
           <h2>{texts.trendingMovies}</h2>
-          <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} buttonType='add' />
+          <MovieList 
+            movies={trendingMovies} 
+            onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} 
+            language={language} 
+            buttonType='add'
+            onFavoriteClick={(movieId) => handleAddToFavorites(movieId, 'movie')} 
+          />
           <h2>{texts.trendingTVShows}</h2>
-          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} buttonType='add' />
+          <TVShowList 
+            shows={trendingTVShows} 
+            onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
+            language={language} 
+            buttonType='add'
+            onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+          />
         </>
       )}
       {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}

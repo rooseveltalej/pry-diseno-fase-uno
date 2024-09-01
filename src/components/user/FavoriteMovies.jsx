@@ -1,4 +1,3 @@
-// FavoriteMovies.jsx
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import MovieList from "../MovieList";
@@ -26,6 +25,28 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
         fetchFavoriteMovies();
     }, [apiKey, sessionId]);
 
+    const removeFromFavorites = (movieId) => {
+        fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                media_type: 'movie',
+                media_id: movieId,
+                favorite: false,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Removed from favorites:', data);
+            setFavoriteMovies(prev => prev.filter(movie => movie.id !== movieId));
+        })
+        .catch(error => {
+            console.error('Error removing from favorites:', error);
+        });
+    };
+
     // Text translations
     const texts = {
         favoriteMovies: language === 'es' ? 'Mis Películas Favoritas' : 'My Favorite Movies',
@@ -40,6 +61,8 @@ const FavoriteMovies = ({ sessionId, apiKey }) => {
                     movies={favoriteMovies} 
                     onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, language)} 
                     language={language}
+                    buttonType='remove'
+                    onButtonClick={removeFromFavorites}
                 />
             ) : (
                 <p>{texts.noFavorites}</p>

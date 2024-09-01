@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import MovieCard from './MovieCard';
 
 const MovieList = ({ movies, onMovieClick, language, buttonType, onButtonClick }) => {
-  console.log('Movies Prop:', movies);
+  console.log('movies Prop:', movies);
+  
   return (
     <main>
       {movies.map((movie) => (
@@ -10,9 +11,9 @@ const MovieList = ({ movies, onMovieClick, language, buttonType, onButtonClick }
           key={movie.id} 
           movie={movie} 
           onClick={() => onMovieClick(movie.id)} 
-          language={language} 
-          buttonType={buttonType} 
-          onButtonClick={() => onButtonClick(movie.id)} 
+          language={language}
+          buttonType={buttonType}  // Pasar el prop de agregar o eliminar
+          onButtonClick={() => onButtonClick(movie.id)}  // Manejar el clic en el botón
         />
       ))}
     </main>
