@@ -54,6 +54,7 @@ const UserList = ({ sessionId, apiKey }) => {
                                         shows={tvShows} 
                                         onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow, language)}
                                         language={language}
+                                        buttonType='remove'
                                     />
                                 </>
                             ) : (

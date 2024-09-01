@@ -40,6 +40,7 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
                     shows={favoriteTvShows} 
                     onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow, language)} 
                     language={language}
+                    buttonType="remove"
                 />
             ) : (
                 <p>{texts.noFavorites}</p>

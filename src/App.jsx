@@ -102,7 +102,7 @@ const App = () => {
           <h2>{texts.trendingMovies}</h2>
           <MovieList movies={trendingMovies} onMovieClick={(movieId) => showMovieDetails(movieId, apiKey, setSelectedMovie, setSelectedShow)} language={language} buttonType='add' />
           <h2>{texts.trendingTVShows}</h2>
-          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} />
+          <TVShowList shows={trendingTVShows} onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} language={language} buttonType='add' />
         </>
       )}
       {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}

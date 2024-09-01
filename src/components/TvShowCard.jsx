@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const TVShowCard = ({ show, onClick, language }) => {
+const TvShowCard = ({ show, onClick, language, buttonType, onButtonClick }) => {
   const posterPath = show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '';
 
   // Text translations
@@ -8,6 +8,8 @@ const TVShowCard = ({ show, onClick, language }) => {
     rating: language === 'es' ? 'Calificación' : 'Rating',
     firstAirDate: language === 'es' ? 'Primera emisión' : 'First Air Date',
     more: language === 'es' ? 'Ver más' : 'See More',
+    addToList: language === 'es' ? 'Guardar en lista' : 'Add to List',
+    removeFromList: language === 'es' ? 'Eliminar de lista' : 'Remove from List',
   };
 
   return (
@@ -18,12 +20,15 @@ const TVShowCard = ({ show, onClick, language }) => {
         <p className="movie-info"><strong>{texts.rating}:</strong> {show.vote_average}/10</p>
         <p className="movie-info"><strong>{texts.firstAirDate}:</strong> {show.first_air_date}</p>
         <button>{texts.more}</button>
+        <button onClick={onButtonClick}>
+          {buttonType === 'add' ? texts.addToList : texts.removeFromList}
+        </button>
       </div>
     </div>
   );
 };
 
-TVShowCard.propTypes = {
+TvShowCard.propTypes = {
   show: PropTypes.shape({
     poster_path: PropTypes.string,
     name: PropTypes.string.isRequired,
@@ -32,6 +37,8 @@ TVShowCard.propTypes = {
   }).isRequired,
   onClick: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
+  buttonType: PropTypes.oneOf(['add', 'remove']).isRequired,
+  onButtonClick: PropTypes.func.isRequired,
 };
 
-export default TVShowCard;
+export default TvShowCard;
