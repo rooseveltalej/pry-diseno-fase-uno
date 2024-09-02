@@ -11,7 +11,7 @@ const MovieList = ({ movies, onMovieClick, language, buttonType, onFavoriteClick
           onClick={() => onMovieClick(movie.id)} 
           language={language}
           buttonType={buttonType}  // Pasar el tipo de botón
-          onFavoriteClick={() => onFavoriteClick(movie.id)} 
+          onFavoriteClick={onFavoriteClick} 
         />
       ))}
     </main>

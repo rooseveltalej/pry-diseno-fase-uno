@@ -40,13 +40,50 @@ const App = () => {
     backToTrending: language === 'es' ? 'Volver a Tendencias' : 'Back to Trending',
   };
 
-  // Function to handle adding to favorites
-  const handleAddToFavorites = async (mediaId, mediaType) => {
+
+  const getAccountId = async () => {
     try {
-      const sessionId = localStorage.getItem('session_id'); // Usa la sesión autenticada
-      const endpoint = mediaType === 'movie'
-        ? `https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`
-        : `https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`;
+      const sessionId = localStorage.getItem('session_id'); // Asegúrate de que el session_id esté disponible
+      if (!sessionId) {
+        console.error('Session ID is missing');
+        alert('No se pudo obtener el ID de sesión.');
+        return null;
+      }
+  
+      const response = await fetch(`https://api.themoviedb.org/3/account?api_key=${apiKey}&session_id=${sessionId}`);
+      if (response.ok) {
+        const data = await response.json();
+        return data.id; // Retorna el account_id
+      } else {
+        const errorData = await response.json();
+        console.error('Error al obtener el account_id:', errorData);
+        alert('Error al obtener el ID de cuenta.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Ocurrió un error al obtener el ID de cuenta.');
+      return null;
+    }
+  };
+  
+
+  // Function to handle adding to favorites
+  const handleAddToFavorites = async (mediaId) => {
+    try {
+      const sessionId = localStorage.getItem('session_id');
+      const accountId = localStorage.getItem('account_id') || await getAccountId(); // Obtén el account_id si no está en localStorage
+  
+      if (!sessionId || !accountId) {
+        console.error('Session ID or Account ID is missing');
+        alert('No se pudo obtener la sesión o el ID de cuenta.');
+        return;
+      }
+  
+      // Guarda el accountId en localStorage para futuras solicitudes
+      localStorage.setItem('account_id', accountId);
+  
+      const endpoint = `https://api.themoviedb.org/3/account/${accountId}/favorite?api_key=${apiKey}&session_id=${sessionId}`;
       
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -54,12 +91,12 @@ const App = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          media_type: mediaType,
+          media_type: 'tv', // O 'movie', dependiendo del tipo de medio
           media_id: mediaId,
           favorite: true
         }),
       });
-
+  
       if (response.ok) {
         alert('Elemento agregado a favoritos.');
       } else {
@@ -130,7 +167,7 @@ const App = () => {
               onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
               language={language} 
               buttonType='add'
-              onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+              onButtonClick={(showId) => handleAddToFavorites(showId, 'tv')} 
             />
           )}
           {searchType === 'actor' && (
@@ -147,7 +184,7 @@ const App = () => {
                 onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
                 language={language} 
                 buttonType='add'
-                onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+                onButtonClick={(showId) => handleAddToFavorites(showId, 'tv')} 
               />
             </>
           )}
@@ -168,7 +205,7 @@ const App = () => {
             onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
             language={language} 
             buttonType='add'
-            onFavoriteClick={(showId) => handleAddToFavorites(showId, 'tv')} 
+            onButtonClick={handleAddToFavorites} 
           />
         </>
       )}

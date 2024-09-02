@@ -2,20 +2,18 @@ import PropTypes from 'prop-types';
 import TVShowCard from './TvShowCard';
 
 const TvShowList = ({ shows, onShowClick, language, buttonType, onButtonClick }) => {
-  console.log('shows Prop:', shows);
-  
   return (
     <main>
       {shows.map((show) => (
-        <TVShowCard 
-          key={show.id} 
-          show={show} 
-          onClick={() => onShowClick(show.id)} 
-          language={language}
-          buttonType={buttonType}  // Pasar el prop de agregar o eliminar
-          onButtonClick={() => onButtonClick(show.id)}  // Manejar el clic en el botón
-        />
-      ))}
+      <TVShowCard 
+        key={show.id} 
+        show={show} 
+        onClick={() => onShowClick(show.id)} 
+        language={language}
+        buttonType={buttonType}
+        onButtonClick={onButtonClick}
+      />
+))}
     </main>
   );
 };

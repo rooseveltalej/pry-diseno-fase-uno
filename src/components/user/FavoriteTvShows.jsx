@@ -1,4 +1,3 @@
-// FavoriteTvShows.jsx
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import TvShowList from "../TvShowList";
@@ -26,6 +25,32 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
         fetchFavoriteTvShows();
     }, [apiKey, sessionId]);
 
+    // Function to handle removing from favorites
+    const handleRemoveFromFavorites = async (showId) => {
+        try {
+            const response = await fetch(`https://api.themoviedb.org/3/account/{account_id}/favorite?api_key=${apiKey}&session_id=${sessionId}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    media_type: 'tv',
+                    media_id: showId,
+                    favorite: false
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error('Error removing from favorites');
+
+            alert('Elemento eliminado de favoritos.');
+            // Update state
+            setFavoriteTvShows((prevShows) => prevShows.filter(show => show.id !== showId));
+        } catch (error) {
+            console.error('Error removing TV show from favorites:', error);
+            alert('Error al eliminar la serie de favoritos.');
+        }
+    };
+
     // Text translations
     const texts = {
         favoriteShows: language === 'es' ? 'Mis Series Favoritas' : 'My Favorite TV Shows',
@@ -40,7 +65,8 @@ const FavoriteTvShows = ({ sessionId, apiKey }) => {
                     shows={favoriteTvShows} 
                     onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow, language)} 
                     language={language}
-                    buttonType="remove"
+                    buttonType="remove"  // Establece el tipo de botón para eliminar
+                    onButtonClick={handleRemoveFromFavorites} // Maneja el clic en el botón de eliminar
                 />
             ) : (
                 <p>{texts.noFavorites}</p>

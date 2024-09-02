@@ -8,8 +8,8 @@ const TvShowCard = ({ show, onClick, language, buttonType, onButtonClick }) => {
     rating: language === 'es' ? 'Calificación' : 'Rating',
     firstAirDate: language === 'es' ? 'Primera emisión' : 'First Air Date',
     more: language === 'es' ? 'Ver más' : 'See More',
-    addToList: language === 'es' ? 'Guardar en lista' : 'Add to List',
-    removeFromList: language === 'es' ? 'Eliminar de lista' : 'Remove from List',
+    addToList: language === 'es' ? 'Guardar en Favoritos' : 'Add to Favorites',
+    removeFromList: language === 'es' ? 'Eliminar de Favoritos' : 'Remove from Favorites',
   };
 
   return (
@@ -20,7 +20,7 @@ const TvShowCard = ({ show, onClick, language, buttonType, onButtonClick }) => {
         <p className="movie-info"><strong>{texts.rating}:</strong> {show.vote_average}/10</p>
         <p className="movie-info"><strong>{texts.firstAirDate}:</strong> {show.first_air_date}</p>
         <button>{texts.more}</button>
-        <button onClick={onButtonClick}>
+        <button onClick={()=>onButtonClick(show.id)}>
           {buttonType === 'add' ? texts.addToList : texts.removeFromList}
         </button>
       </div>
