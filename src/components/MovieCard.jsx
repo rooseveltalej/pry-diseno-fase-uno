@@ -19,7 +19,7 @@ const MovieCard = ({ movie, onClick, language, buttonType, onFavoriteClick }) =>
         <p className="movie-info"><strong>{texts.rating}:</strong> {movie.vote_average}/10</p>
         <p className="movie-info"><strong>{texts.releaseDate}:</strong> {movie.release_date}</p>
         <button>{texts.more}</button>
-        <button onClick={onFavoriteClick}>
+        <button onClick={()=> onFavoriteClick(movie.id)}>
           {buttonType === 'add' ? texts.addToFavorites : texts.removeFromFavorites}
         </button>
       </div>

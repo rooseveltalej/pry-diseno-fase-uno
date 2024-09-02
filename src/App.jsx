@@ -69,7 +69,7 @@ const App = () => {
   
 
   // Function to handle adding to favorites
-  const handleAddToFavorites = async (mediaId) => {
+  const handleAddToFavorites = async (mediaId, media_type) => {
     try {
       const sessionId = localStorage.getItem('session_id');
       const accountId = localStorage.getItem('account_id') || await getAccountId(); // Obtén el account_id si no está en localStorage
@@ -91,7 +91,7 @@ const App = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          media_type: 'tv', // O 'movie', dependiendo del tipo de medio
+          media_type: media_type, // O 'movie', dependiendo del tipo de medio
           media_id: mediaId,
           favorite: true
         }),
@@ -205,7 +205,7 @@ const App = () => {
             onShowClick={(showId) => showTvShowDetails(showId, apiKey, setSelectedShow)} 
             language={language} 
             buttonType='add'
-            onButtonClick={handleAddToFavorites} 
+            onButtonClick={(showId) => handleAddToFavorites(showId, 'tv')} 
           />
         </>
       )}
