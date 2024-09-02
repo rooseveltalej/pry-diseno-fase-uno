@@ -258,3 +258,26 @@ button:hover {
   font-weight: bold;
   color: #ff8a00;
 }
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.movie-card {
+  background-color: #1e1e1e !important;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  
+  opacity: 0;
+  animation: fadeInUp 1.2s ease forwards;
+}
