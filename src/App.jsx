@@ -19,7 +19,7 @@ import { handleActorSearch, handleMovieSearchChange, handleTVSearchChange } from
 
 const App = () => {
   const { language, setLanguage } = useLanguage();
-  const apiKey = 'af7264be91d3f252b1abe33245f3b69f';
+  const apiKey = "YOUR_API_KEY";
   const { trendingMovies } = useFetchTrendingMovies(apiKey, language);
   const { trendingTVShows } = useFetchTrendingTVShows(apiKey, language);
   const { movieGenres = [], tvGenres = [], actorGenres = [] } = useFetchGenres(apiKey, language, 'person');
