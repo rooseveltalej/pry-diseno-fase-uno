@@ -13,7 +13,7 @@ const UserProfile = ({ sessionId }) => {
     const { language } = useLanguage();
     const [userInfo, setUserInfo] = useState(null);
     const [selectedSection, setSelectedSection] = useState('lists'); // Estado para controlar la sección seleccionada
-    const apiKey = "af7264be91d3f252b1abe33245f3b69f";
+    const apiKey = "YOUR_API_KEY";
 
     useEffect(() => {
         const fetchUserInfo = async () => {

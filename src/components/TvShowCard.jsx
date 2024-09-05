@@ -34,6 +34,7 @@ TvShowCard.propTypes = {
     name: PropTypes.string.isRequired,
     vote_average: PropTypes.number.isRequired,
     first_air_date: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
