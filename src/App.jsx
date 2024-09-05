@@ -16,6 +16,7 @@ import useSearchTVShows from './hooks/useSearchTVShows';
 import './Responsive.css';
 import { closeModal, closeModalShow, showMovieDetails, showTvShowDetails } from './utils/modalHandlers';
 import { handleActorSearch, handleMovieSearchChange, handleTVSearchChange } from './utils/searchHandlers';
+import { FloatingWhatsApp } from 'react-floating-whatsapp';
 
 const App = () => {
   const { language, setLanguage } = useLanguage();
@@ -211,7 +212,20 @@ const App = () => {
       )}
       {selectedShow && <TvShowModal show={selectedShow} onClose={() => closeModalShow(setSelectedShow)} apiKey={apiKey} language={language} />}
       {selectedMovie && <MovieModal movie={selectedMovie} onClose={() => closeModal(setSelectedMovie)} apiKey={apiKey} language={language} />}
+      <FloatingWhatsApp 
+        phoneNumber="+50688888888"
+        accountName="Tecflix Soporte"
+        avatar="/public/Logo2.jpeg"
+        statusMessage="Responde enseguida"
+        chatMessage="¡Hola! ¿En qué te podemos ayudar?" 
+        placeholder="Escribe un mensaje..."  
+        darkMode={true}              // dark mode (si lo ven mejor en blanco, se pone false)
+        notification={true}          
+        notificationDelay={30}       
+        allowClickAway={true}        
+      />
     </div>
+    
   );
 };
 
