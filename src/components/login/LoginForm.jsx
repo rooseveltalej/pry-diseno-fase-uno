@@ -8,7 +8,7 @@ const LoginForm = ({ onLanguageChange }) => {
   const [requestToken, setRequestToken] = useState(null);
   const [sessionId, setSessionId] = useState(localStorage.getItem('session_id'));
   const [username, setUsername] = useState(localStorage.getItem('username'));
-  const apiKey = "af7264be91d3f252b1abe33245f3b69f";
+  const apiKey = "YOUR_APIKEY";
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

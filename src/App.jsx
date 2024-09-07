@@ -20,7 +20,7 @@ import { FloatingWhatsApp } from 'react-floating-whatsapp';
 
 const App = () => {
   const { language, setLanguage } = useLanguage();
-  const apiKey = "YOUR_API_KEY";
+  const apiKey = "YOUR_APIKEY";
   const { trendingMovies } = useFetchTrendingMovies(apiKey, language);
   const { trendingTVShows } = useFetchTrendingTVShows(apiKey, language);
   const { movieGenres = [], tvGenres = [], actorGenres = [] } = useFetchGenres(apiKey, language, 'person');
